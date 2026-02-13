@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.NexusEndOfMonthProcessingSheet02SubAdjustmentAmountMapper">
+    <resultMap id="NexusEndOfProcessingSheet02SubAdjustmentAmountResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusEndOfMonthProcessingSheet02SubAdjustmentAmountEntity">
+        <result column="parent_id" property="parentId"/>
+        <result column="bonus_money" property="bonusMoney"/>
+        <result column="bonus_flag" property="bonusFlag"/>
+        <result column="off_hours_time" property="offHoursTime"/>
+        <result column="off_hours_flag" property="offHoursFlag"/>
+        <result column="night_shift_time" property="nightShiftTime"/>
+        <result column="night_shift_flag" property="nightShiftFlag"/>
+        <result column="others_money" property="othersMoney"/>
+        <result column="others_flag" property="othersFlag"/>
+        <result column="registered_user_id" property="registeredUserId"/>
+        <result column="registered_date" property="registeredDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_date" property="updateDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="hashmap">
+        INSERT INTO nexus_end_of_processing_sheet_02_sub_adjustment_amount (
+
+        parent_id,
+        bonus_money,
+        bonus_flag,
+        off_hours_time,
+        off_hours_flag,
+        night_shift_time,
+        night_shift_flag,
+        others_money,
+        others_flag,
+        registered_user_id,
+        registered_date
+
+        ) VALUES (
+
+        ${parentId},
+        #{bonusMoney, jdbcType=INTEGER},
+        #{bonusFlag, jdbcType=TINYINT},
+        #{offHoursTime, jdbcType=DOUBLE},
+        #{offHoursFlag, jdbcType=TINYINT},
+        #{nightShiftTime, jdbcType=DOUBLE},
+        #{nightShiftFlag, jdbcType=TINYINT},
+        #{othersMoney, jdbcType=INTEGER},
+        #{othersFlag, jdbcType=TINYINT},
+        #{registeredUserId},
+        now()
+
+        )
+    </insert>
+
+    <update id="update" parameterType="hashmap">
+        UPDATE nexus_end_of_processing_sheet_02_sub_adjustment_amount SET
+
+        bonus_money = #{bonusMoney, jdbcType=INTEGER},
+        bonus_flag = #{bonusFlag, jdbcType=TINYINT},
+        off_hours_time = #{offHoursTime, jdbcType=DOUBLE},
+        off_hours_flag = #{offHoursFlag, jdbcType=TINYINT},
+        night_shift_time = #{nightShiftTime, jdbcType=DOUBLE},
+        night_shift_flag = #{nightShiftFlag, jdbcType=TINYINT},
+        others_money = #{othersMoney, jdbcType=INTEGER},
+        others_flag = #{othersFlag, jdbcType=TINYINT},
+        update_user_id = #{updateUserId},
+        update_date = now()
+
+        WHERE parent_id = ${parentId}
+    </update>
+
+    <delete id="deleteByParentId" parameterType="hashmap">
+        DELETE FROM nexus_end_of_processing_sheet_02_sub_adjustment_amount
+        <where>
+            parent_id = ${parentId}
+        </where>
+    </delete>
+
+    <select id="findByParentId" parameterType="hashmap" resultMap="NexusEndOfProcessingSheet02SubAdjustmentAmountResultMap">
+        SELECT * FROM nexus_end_of_processing_sheet_02_sub_adjustment_amount
+        <where>
+            parent_id = ${parentId}
+        </where>
+    </select>
+
+    <select id="findByParentIds" parameterType="hashmap" resultMap="NexusEndOfProcessingSheet02SubAdjustmentAmountResultMap">
+        SELECT * FROM nexus_end_of_processing_sheet_02_sub_adjustment_amount
+        <where>
+            parent_id IN
+            <foreach collection="parentIds" item="parentId" open="(" separator="," close=")">
+                ${parentId}
+            </foreach>
+        </where>
+    </select>
+</mapper>

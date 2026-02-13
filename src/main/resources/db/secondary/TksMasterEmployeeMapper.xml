@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.secondary.mapper.TksMasterEmployeeMapper">
+
+    <resultMap id="TksMasterEmployeeResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.secondary.entity.TksMasterEmployeeEntity">
+        <result column="ID" property="ID"/>
+        <result column="CompanyID" property="companyId"/>
+        <result column="FamilyName" property="familyName"/>
+        <result column="FirstName" property="firstName"/>
+        <result column="MailAddress_pc" property="mailAddressPc"/>
+        <result column="ManagerID" property="managerId"/>
+        <result column="ManagerEmployeeName" property="managerEmployeeName"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        SELECT
+        emp.ID AS ID,
+        emp.CompanyID AS CompanyID,
+        <include refid="trimSql">
+            <property name="trimSqlParam" value="emp.FamilyName"/>
+        </include> AS FamilyName,
+        <include refid="trimSql">
+            <property name="trimSqlParam" value="emp.FirstName"/>
+        </include> AS FirstName,
+        emp.MailAddress_pc AS MailAddress_PC,
+        eng.ManagerID AS ManagerID,
+        CONCAT(
+        <include refid="trimSql">
+            <property name="trimSqlParam" value="salEmp.FamilyName"/>
+        </include>, ' ',
+        <include refid="trimSql">
+            <property name="trimSqlParam" value="salEmp.FirstName"/>
+        </include>
+        ) AS ManagerEmployeeName
+        FROM Master_Employee emp
+        LEFT JOIN Engineer eng ON eng.EmployeeID = emp.ID
+        LEFT JOIN Salesman sal ON sal.ID = eng.ManagerID
+        LEFT JOIN Master_Employee salEmp ON salEmp.ID = sal.EmployeeID
+    </sql>
+
+    <select id="findById" parameterType="hashmap" resultMap="TksMasterEmployeeResultMap">
+        SELECT *
+        FROM Master_Employee
+        <where>
+            0 = DeleteFlag
+            AND ID = ${id}
+        </where>
+    </select>
+
+    <select id="findByIds" parameterType="hashmap" resultMap="TksMasterEmployeeResultMap">
+        <include refid="selectSql">
+        </include>
+        <where>
+            0 = emp.DeleteFlag
+            AND emp.ID IN
+            <foreach collection="idList" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
+    <sql id="trimSql">
+        LTRIM(RTRIM( ${trimSqlParam} ))
+    </sql>
+
+    <select id="findByMailAddressList" parameterType="hashmap" resultMap="TksMasterEmployeeResultMap">
+        <include refid="selectSql">
+        </include>
+        <where>
+            0 = emp.DeleteFlag AND 0 = eng.DeleteFlag AND 0 = sal.DeleteFlag AND 0 = salEmp.DeleteFlag
+            AND (emp.FamilyName IS NOT NULL  AND  emp.FirstName IS NOT NULL)
+            AND emp.MailAddress_PC IN
+            <foreach collection="mailAddressList" item="mailAddress" open="(" separator="," close=")">
+                #{mailAddress}
+            </foreach>
+        </where>
+    </select>
+
+</mapper>

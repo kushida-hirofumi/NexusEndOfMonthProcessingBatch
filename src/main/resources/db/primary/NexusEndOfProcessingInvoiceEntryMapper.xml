@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.NexusEndOfProcessingInvoiceEntryMapper">
+    <resultMap id="NexusEndOfProcessingInvoiceEntryResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusEndOfProcessingInvoiceEntryEntity">
+        <result column="id" property="id"/>
+        <result column="employee_id" property="employeeId"/>
+        <result column="employee_name" property="employeeName"/>
+        <result column="working_date" property="workingDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="work_time" property="workTime"/>
+        <result column="business_trip_quantity" property="businessTripQuantity"/>
+        <result column="quantity" property="quantity"/>
+        <result column="HGB_money" property="hgbMoney"/>
+        <result column="HGB_company" property="hgbCompany"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="site" property="site"/>
+        <result column="closing_date" property="closingDate"/>
+        <result column="excess" property="excess"/>
+        <result column="deduction" property="deduction"/>
+        <result column="standard_lower_limit" property="standardLowerLimit"/>
+        <result column="standard_upper_limit" property="standardUpperLimit"/>
+        <result column="delayed_payment_date" property="delayedPaymentDate"/>
+        <result column="upstream_company_name" property="upstreamCompanyName"/>
+        <result column="contractor_company_id" property="contractorCompanyId"/>
+        <result column="EG_company_name" property="egCompanyName"/>
+        <result column="month_end_processing_creation_company_name" property="monthEndProcessingCreationCompanyName"/>
+        <result column="half_affiliation" property="halfAffiliation"/>
+        <result column="half_employee_id" property="halfEmployeeId"/>
+        <result column="manager_employee_id" property="managerEmployeeId"/>
+        <result column="counter_sales_employee_id" property="counterSalesEmployeeId"/>
+        <result column="document_creator_id" property="documentCreatorId"/>
+        <result column="monthly_processing_usage" property="monthlyProcessingUsage"/>
+        <result column="each_mark" property="eachMark"/>
+        <result column="pdf_path" property="pdfPath"/>
+        <result column="pdf_file_name" property="pdfFileName"/>
+        <result column="registered_user_id" property="registeredUserId"/>
+        <result column="registered_date" property="registeredDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_date" property="updateDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="hashmap" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO nexus_end_of_processing_invoice_entry (
+
+        <if test="id!=null">
+            id,
+        </if>
+        employee_id,
+        employee_name,
+        working_date,
+        work_time,
+        business_trip_quantity,
+        quantity,
+        HGB_money,
+        HGB_company,
+        unit_price,
+        site,
+        closing_date,
+        excess,
+        deduction,
+        standard_lower_limit,
+        standard_upper_limit,
+        delayed_payment_date,
+        upstream_company_name,
+        contractor_company_id,
+        EG_company_name,
+        month_end_processing_creation_company_name,
+        half_affiliation,
+        half_employee_id,
+        manager_employee_id,
+        counter_sales_employee_id,
+        document_creator_id,
+        monthly_processing_usage,
+        each_mark,
+        pdf_path,
+        pdf_file_name,
+        registered_user_id,
+        registered_date
+
+        ) VALUE (
+
+        <if test="id!=null">
+            ${id},
+        </if>
+        #{employeeId, jdbcType=INTEGER},
+        #{employeeName, jdbcType=VARCHAR},
+        #{workingDate, jdbcType=TIMESTAMP},
+        #{workTime, jdbcType=DOUBLE},
+        #{businessTripQuantity, jdbcType=INTEGER},
+        #{quantity, jdbcType=VARCHAR},
+        #{hgbMoney, jdbcType=INTEGER},
+        #{hgbCompany, jdbcType=VARCHAR},
+        #{unitPrice, jdbcType=INTEGER},
+        #{site, jdbcType=VARCHAR},
+        #{closingDate, jdbcType=VARCHAR},
+        #{excess, jdbcType=INTEGER},
+        #{deduction, jdbcType=INTEGER},
+        #{standardLowerLimit, jdbcType=INTEGER},
+        #{standardUpperLimit, jdbcType=INTEGER},
+        #{delayedPaymentDate, jdbcType=VARCHAR},
+        #{upstreamCompanyName, jdbcType=VARCHAR},
+        #{contractorCompanyId, jdbcType=INTEGER},
+        #{egCompanyName, jdbcType=VARCHAR},
+        #{monthEndProcessingCreationCompanyName, jdbcType=VARCHAR},
+        #{halfAffiliation, jdbcType=VARCHAR},
+        #{halfEmployeeId, jdbcType=INTEGER},
+        #{managerEmployeeId, jdbcType=INTEGER},
+        #{counterSalesEmployeeId, jdbcType=INTEGER},
+        #{documentCreatorId, jdbcType=INTEGER},
+        #{monthlyProcessingUsage, jdbcType=TINYINT},
+        #{eachMark, jdbcType=TINYINT},
+        #{pdfPath, jdbcType=VARCHAR},
+        #{pdfFileName, jdbcType=VARCHAR},
+        #{registeredUserId},
+        now()
+        )
+
+        ON DUPLICATE KEY UPDATE
+        id = id,
+        employee_id = #{employeeId, jdbcType=INTEGER},
+        employee_name = #{employeeName, jdbcType=VARCHAR},
+        working_date = #{workingDate, jdbcType=TIMESTAMP},
+        work_time = #{workTime, jdbcType=DOUBLE},
+        business_trip_quantity = #{businessTripQuantity, jdbcType=INTEGER},
+        quantity = #{quantity, jdbcType=VARCHAR},
+        HGB_money = #{hgbMoney, jdbcType=INTEGER},
+        HGB_company = #{hgbCompany, jdbcType=VARCHAR},
+        unit_price = #{unitPrice, jdbcType=INTEGER},
+        site = #{site, jdbcType=VARCHAR},
+        closing_date = #{closingDate, jdbcType=VARCHAR},
+        excess = #{excess, jdbcType=INTEGER},
+        deduction = #{deduction, jdbcType=INTEGER},
+        standard_lower_limit = #{standardLowerLimit, jdbcType=INTEGER},
+        standard_upper_limit = #{standardUpperLimit, jdbcType=INTEGER},
+        delayed_payment_date = #{delayedPaymentDate, jdbcType=VARCHAR},
+        upstream_company_name = #{upstreamCompanyName, jdbcType=VARCHAR},
+        contractor_company_id = #{contractorCompanyId, jdbcType=INTEGER},
+        EG_company_name = #{egCompanyName, jdbcType=VARCHAR},
+        month_end_processing_creation_company_name = #{monthEndProcessingCreationCompanyName, jdbcType=VARCHAR},
+        half_affiliation = #{halfAffiliation, jdbcType=VARCHAR},
+        half_employee_id = #{halfEmployeeId, jdbcType=INTEGER},
+        manager_employee_id = #{managerEmployeeId, jdbcType=INTEGER},
+        counter_sales_employee_id = #{counterSalesEmployeeId, jdbcType=INTEGER},
+        document_creator_id = #{documentCreatorId, jdbcType=INTEGER},
+        monthly_processing_usage = #{monthlyProcessingUsage, jdbcType=TINYINT},
+        each_mark = #{eachMark, jdbcType=TINYINT},
+        pdf_path = #{pdfPath, jdbcType=VARCHAR},
+        pdf_file_name = #{pdfFileName, jdbcType=VARCHAR},
+        update_user_id = #{registeredUserId},
+        update_date = now()
+    </insert>
+
+    <delete id="deleteById" parameterType="hashmap">
+        DELETE FROM nexus_end_of_processing_invoice_entry WHERE id = #{id}
+    </delete>
+
+    <select id="monthlyProcessingUsedBillingSearch" parameterType="hashmap" resultMap="NexusEndOfProcessingInvoiceEntryResultMap">
+        SELECT * FROM nexus_end_of_processing_invoice_entry
+        <where>
+            monthly_processing_usage = true
+            <choose>
+                <when test="employeeId!=null">
+                    AND employee_id = ${employeeId}
+                </when>
+                <when test="employeeName!=null">
+                    AND employee_name = #{employeeName}
+                </when>
+            </choose>
+            AND working_date = #{workingDate}
+        </where>
+        ORDER BY registered_date ASC
+    </select>
+
+    <select id="findById" parameterType="hashmap" resultMap="NexusEndOfProcessingInvoiceEntryResultMap">
+        SELECT * FROM nexus_end_of_processing_invoice_entry
+        <where>
+            id = ${id}
+        </where>
+    </select>
+
+    <select id="findByIds" parameterType="hashmap" resultMap="NexusEndOfProcessingInvoiceEntryResultMap">
+        SELECT * FROM nexus_end_of_processing_invoice_entry
+        <where>
+            id IN
+            <foreach collection="idList" item="id" open="(" separator="," close=")">
+                ${id}
+            </foreach>
+        </where>
+        ORDER BY FIELD(id,
+        <foreach collection="idList" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </select>
+
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.NexusLinkingInformationBetweenTksAndFreeeMapper">
+
+    <resultMap id="NexusLinkingInformationBetweenTksAndFreeeResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusLinkingInformationBetweenTksAndFreeeEntity">
+        <result column="tks_data" property="tksData"/>
+        <result column="freee_data" property="freeeData"/>
+        <result column="registered_user_id" property="registeredUserId"/>
+        <result column="registered_date" property="registeredDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_date" property="updateDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <insert id="insertList" parameterType="hashmap">
+        INSERT INTO nexus_linking_information_between_tks_and_freee (
+
+        tks_data,
+        freee_data,
+        registered_user_id,
+        registered_date
+
+        ) VALUES
+        <foreach collection="entities" item="entity" index="index" separator=",">
+            (
+            ${entity.tksData},
+            #{entity.freeeData},
+            ${entity.registeredUserId},
+            now()
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        freee_data = VALUES(freee_data),
+        update_user_id = VALUES(registered_user_id),
+        update_date = NOW()
+    </insert>
+
+    <select id="findByTksIds" parameterType="hashmap" resultMap="NexusLinkingInformationBetweenTksAndFreeeResultMap">
+        SELECT *
+        FROM nexus_linking_information_between_tks_and_freee
+        <where>
+            tks_data IN (
+            <foreach collection="tksIds" item="tksId" separator=",">
+                ${tksId}
+            </foreach>
+            )
+        </where>
+    </select>
+
+    <select id="findAll" resultMap="NexusLinkingInformationBetweenTksAndFreeeResultMap">
+        SELECT * FROM nexus_linking_information_between_tks_and_freee
+    </select>
+
+    <select id="findByFreeeIdList" resultMap="NexusLinkingInformationBetweenTksAndFreeeResultMap">
+        SELECT * FROM nexus_linking_information_between_tks_and_freee
+        <where>
+            freee_data IN (
+            <foreach collection="freeeIdList" item="freeeId" separator=",">
+                #{freeeId}
+            </foreach>
+            )
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.NexusEndOfMonthProcessingSheet02SubIrregularMapper">
+    <resultMap id="NexusEndOfProcessingSheet02SubIrregularResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusEndOfMonthProcessingSheet02SubIrregularEntity">
+        <result column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="index" property="index"/>
+        <result column="subject" property="subject"/>
+        <result column="quantity" property="quantity"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="taxation" property="taxation"/>
+        <result column="registered_user_id" property="registeredUserId"/>
+        <result column="registered_date" property="registeredDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_date" property="updateDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <insert id="insertList" parameterType="hashmap">
+        INSERT INTO nexus_end_of_month_processing_sheet_02_sub_irregular (
+
+        id,
+        parent_id,
+        `index`,
+        subject,
+        quantity,
+        unit_price,
+        taxation,
+        registered_user_id,
+        registered_date
+
+        ) VALUES
+        <foreach collection="entities" item="entity" open="(" separator=") , (" close=")">
+            #{entity.id, jdbcType=VARCHAR},
+            ${entity.parentId},
+            ${entity.index},
+            #{entity.subject, jdbcType=VARCHAR},
+            #{entity.quantity, jdbcType=VARCHAR},
+            ${entity.unitPrice},
+            ${entity.taxation},
+            ${entity.registeredUserId},
+            now()
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        subject = VALUES(subject),
+        quantity = VALUES(quantity),
+        unit_price = VALUES(unit_price),
+        taxation = VALUES(taxation),
+        update_user_id = VALUES(registered_user_id),
+        update_date = NOW()
+    </insert>
+
+    <delete id="deleteByParentId" parameterType="hashmap">
+        DELETE FROM nexus_end_of_month_processing_sheet_02_sub_irregular
+        <where>
+            parent_id = ${parentId}
+        </where>
+    </delete>
+
+    <delete id="deleteByParentIdAndIndexGreaterThanEqual" parameterType="hashmap">
+        DELETE FROM nexus_end_of_month_processing_sheet_02_sub_irregular
+        <where>
+            parent_id = ${parentId}
+            AND `index` >= ${index}
+        </where>
+    </delete>
+
+    <select id="countByParentId" parameterType="hashmap" resultType="Long">
+        SELECT COUNT(*) FROM nexus_end_of_month_processing_sheet_02_sub_irregular
+        <where>
+            parent_id = ${parentId}
+        </where>
+    </select>
+
+    <select id="findByParentIds" parameterType="hashmap" resultMap="NexusEndOfProcessingSheet02SubIrregularResultMap">
+        SELECT * FROM nexus_end_of_month_processing_sheet_02_sub_irregular
+        <where>
+            parent_id IN
+            <foreach collection="parentIds" item="parentId" open="(" separator="," close=")">
+                ${parentId}
+            </foreach>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.NexusEompDependentDeductionTaxAmountPatternMapper">
+    <resultMap id="NexusEompDependentDeductionTaxAmountPatternResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusEompDependentDeductionTaxAmountPatternEntity">
+        <result column="salary_amount_after_insurance_premium_deductions" property="salaryAmountAfterInsurancePremiumDeductions"/>
+        <result column="numberOfDependents" property="numberOfDependents"/>
+        <result column="tax_amount" property="taxAmount"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="NexusEompDependentDeductionTaxAmountPatternResultMap">
+        SELECT * FROM nexus_eomp_dependent_deduction_tax_amount_pattern
+    </select>
+
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.NexusProfitListSummaryMapper">
+
+    <resultMap id="NexusProfitListSummaryResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusProfitListSummaryEntity">
+        <result column="summary_id" property="summaryId"/>
+        <result column="company_id" property="companyId"/>
+        <result column="company_name" property="companyName"/>
+        <result column="contact_id" property="contactId"/>
+        <result column="contact_name" property="contactName"/>
+        <result column="employee_id" property="employeeId"/>
+        <result column="employee_name" property="employeeName"/>
+        <result column="payment_date" property="paymentDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTypeHandler"/>
+        <result column="billing_amount" property="billingAmount"/>
+        <result column="cost_price" property="costPrice"/>
+        <result column="basicPay_amount" property="basicPayAmount"/>
+        <result column="performance_pay" property="performancePay"/>
+        <result column="standard_monthly_amount" property="standardMonthlyAmount"/>
+        <result column="resident_tax" property="residentTax"/>
+        <result column="delete_flg" property="deleteFlg"/>
+        <result column="registered_user_id" property="registeredUserId"/>
+        <result column="registered_date" property="registeredDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_date" property="updateDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="hashmap">
+        INSERT INTO nexus_profit_list_summary (
+
+        summary_id,
+        company_id,
+        company_name,
+        contact_id,
+        contact_name,
+        employee_id,
+        employee_name,
+        payment_date,
+        billing_amount,
+        cost_price,
+        basic_pay_amount,
+        performance_pay,
+        standard_monthly_amount,
+        resident_tax,
+        registered_user_id,
+        registered_date
+
+        ) VALUES (
+
+        (SELECT inn.summary_id FROM nexus_profit_list_summary AS inn
+        <where>
+            inn.delete_flg = false
+            AND inn.company_id = #{companyId}
+            AND inn.contact_id = ${contactId}
+            AND inn.employee_id = #{employeeId}
+            AND inn.payment_date = #{paymentDate}
+        </where>
+        ),
+        ${companyId},
+        #{companyName},
+        ${contactId},
+        #{contactName},
+        ${employeeId},
+        #{employeeName},
+        #{paymentDate},
+        ${billingAmount},
+        ${costPrice},
+        ${basicPayAmount},
+        ${performancePay},
+        ${standardMonthlyAmount},
+        ${residentTax},
+        0,
+        now()
+
+        )
+
+        ON DUPLICATE KEY UPDATE
+
+        summary_id = summary_id,
+        company_id = VALUES(company_id),
+        company_name = VALUES(company_name),
+        contact_id = VALUES(contact_id),
+        contact_name = VALUES(contact_name),
+        employee_id = VALUES(employee_id),
+        employee_name = VALUES(employee_name),
+        payment_date = payment_date,
+        billing_amount = VALUES(billing_amount),
+        cost_price = VALUES(cost_price),
+        basic_pay_amount = VALUES(basic_pay_amount),
+        performance_pay = VALUES(performance_pay),
+        standard_monthly_amount = VALUES(standard_monthly_amount),
+        resident_tax = VALUES(resident_tax),
+        update_user_id = VALUES(registered_user_id), update_date = now()
+    </insert>
+
+    <select id="findAll" resultMap="NexusProfitListSummaryResultMap">
+        SELECT *
+        FROM nexus_profit_list_summary
+        <where>
+            delete_flg = false
+        </where>
+    </select>
+</mapper>

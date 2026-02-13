@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.custom.EompMapper">
+    <resultMap id="ExcessDeductionStatusObjectResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.custom.ExcessDeductionStatusEntity">
+        <result column="id" property="id"/>
+        <result column="status" property="status"/>
+        <result column="quantity" property="quantity"/>
+        <result column="tanka" property="tanka"/>
+    </resultMap>
+
+    <select id="findExcessDeductionStatusData" parameterType="hashmap" resultMap="ExcessDeductionStatusObjectResultMap">
+        SELECT
+            p.id,
+            p.status,
+            CASE p.status
+                WHEN '超過' THEN CAST(p.work_time AS DECIMAL(10, 3)) - CAST(p.standard_upper_limit AS DECIMAL(10, 3))
+                WHEN '控除' THEN CAST(p.work_time AS DECIMAL(10, 3)) - CAST(p.standard_lower_limit AS DECIMAL(10, 3))
+                ELSE 0
+            END AS quantity,
+            CASE p.status
+                WHEN '超過' THEN p.excess
+                WHEN '控除' THEN p.deduction
+                ELSE 0
+            END AS tanka
+        FROM ( SELECT
+                CASE
+                    WHEN standard_upper_limit IS NOT NULL AND work_time > standard_upper_limit THEN '超過'
+                    WHEN standard_lower_limit IS NOT NULL AND standard_lower_limit > work_time THEN '控除'
+                END AS status,
+                id AS id,
+                work_time AS work_time,
+                standard_lower_limit AS standard_lower_limit,
+                deduction AS deduction,
+                standard_upper_limit AS standard_upper_limit,
+                excess AS excess
+            FROM nexus_end_of_processing_sheet_02
+            WHERE work_time IS NOT NULL
+                AND id IN
+                <foreach collection="ids" item="id" open="(" separator="," close=")">
+                    ${id}
+                </foreach>
+        ) AS p
+        WHERE p.status IS NOT NULL
+    </select>
+</mapper>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.NexusEndOfProcessingMapper">
+    <resultMap id="NexusEndOfProcessingResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusEndOfProcessingEntity">
+        <result column="id" property="id"/>
+        <result column="employee_id" property="employeeId"/>
+        <result column="employee_name" property="employeeName"/>
+        <result column="memo" property="memo"/>
+        <result column="working_date" property="workingDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="pay_for_results" property="payForResults"/>
+        <result column="work_time" property="workTime"/>
+        <result column="transportation_expenses" property="transportationExpenses"/>
+        <result column="dependents_number" property="dependentsNumber"/>
+        <result column="presence_or_absence_of_long_term_care_insurance" property="presenceOrAbsenceOfLongTermCareInsurance"/>
+        <result column="holiday" property="holiday"/>
+        <result column="qualification_reward" property="qualificationReward"/>
+        <result column="qualification_examination_fee" property="qualificationExaminationFee"/>
+        <result column="business_trip_costs_expenses" property="businessTripCostsExpenses"/>
+        <result column="overtime_hour" property="overtimeHour"/>
+        <result column="holiday_work_hour" property="holidayWorkHour"/>
+        <result column="night_shift" property="nightShift"/>
+        <result column="technical_allowance_Instructor_fee" property="technicalAllowanceInstructorFee"/>
+        <result column="quantity" property="quantity"/>
+        <result column="work_allowance" property="workAllowance"/>
+        <result column="advance_transportation_expenses" property="advanceTransportationExpenses"/>
+        <result column="zero_premiums_for_early_retirement" property="zeroPremiumsForEarlyRetirement"/>
+        <result column="resident_tax" property="residentTax"/>
+        <result column="basic_salary" property="basicSalary"/>
+        <result column="standard_monthly_fee" property="standardMonthlyFee"/>
+        <result column="deemed_overtime_pay" property="deemedOvertimePay"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="remarks" property="remarks"/>
+        <result column="offsetting_notes" property="offsettingNotes"/>
+        <result column="document_creator_employee_id" property="documentCreatorEmployeeId"/>
+        <result column="most_recent_grant_date" property="mostRecentGrantDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="granted_days" property="grantedDays"/>
+        <result column="last_year_grant_date" property="lastYearGrantDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="granted_days_2" property="grantedDays2"/>
+        <result column="number_of_remaining_paid_holidays" property="numberOfRemainingPaidHolidays"/>
+        <result column="registered_user_id" property="registeredUserId"/>
+        <result column="registered_date" property="registeredDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_date" property="updateDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="hashmap" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO nexus_end_of_processing (
+
+        <if test="id!=null">
+            id,
+        </if>
+        employee_id,
+        employee_name,
+        memo,
+        working_date,
+        pay_for_results,
+        work_time,
+        transportation_expenses,
+        dependents_number,
+        presence_or_absence_of_long_term_care_insurance,
+        holiday,
+        qualification_reward,
+        qualification_examination_fee,
+        business_trip_costs_expenses,
+        overtime_hour,
+        holiday_work_hour,
+        night_shift,
+        technical_allowance_Instructor_fee,
+        quantity,
+        work_allowance,
+        advance_transportation_expenses,
+        zero_premiums_for_early_retirement,
+        resident_tax,
+        basic_salary,
+        standard_monthly_fee,
+        deemed_overtime_pay,
+        unit_price,
+        remarks,
+        offsetting_notes,
+        document_creator_employee_id,
+        most_recent_grant_date,
+        granted_days,
+        last_year_grant_date,
+        granted_days_2,
+        number_of_remaining_paid_holidays,
+        registered_user_id,
+        registered_date
+
+        ) VALUE (
+
+        <if test="id!=null">
+            ${id},
+        </if>
+        #{employeeId, jdbcType=INTEGER},
+        #{employeeName, jdbcType=VARCHAR},
+        #{memo, jdbcType=LONGVARCHAR},
+        #{workingDate, jdbcType=TIMESTAMP},
+        #{payForResults, jdbcType=INTEGER},
+        #{workTime, jdbcType=INTEGER},
+        #{transportationExpenses, jdbcType=INTEGER},
+        #{dependentsNumber, jdbcType=INTEGER},
+        #{presenceOrAbsenceOfLongTermCareInsurance, jdbcType=VARCHAR},
+        #{holiday, jdbcType=DOUBLE},
+        #{qualificationReward, jdbcType=INTEGER},
+        #{qualificationExaminationFee, jdbcType=INTEGER},
+        #{businessTripCostsExpenses, jdbcType=INTEGER},
+        #{overtimeHour, jdbcType=DOUBLE},
+        #{holidayWorkHour, jdbcType=DOUBLE},
+        #{nightShift, jdbcType=DOUBLE},
+        #{technicalAllowanceInstructorFee, jdbcType=INTEGER},
+        #{quantity, jdbcType=DOUBLE},
+        #{workAllowance, jdbcType=INTEGER},
+        #{advanceTransportationExpenses, jdbcType=INTEGER},
+        #{zeroPremiumsForEarlyRetirement, jdbcType=VARCHAR},
+        #{residentTax, jdbcType=INTEGER},
+        #{basicSalary, jdbcType=INTEGER},
+        #{standardMonthlyFee, jdbcType=INTEGER},
+        #{deemedOvertimePay, jdbcType=INTEGER},
+        #{unitPrice, jdbcType=INTEGER},
+        #{remarks, jdbcType=LONGVARCHAR},
+        #{offsettingNotes, jdbcType=LONGVARCHAR},
+        #{documentCreatorEmployeeId, jdbcType=INTEGER},
+        #{mostRecentGrantDate, jdbcType=TIMESTAMP},
+        #{grantedDays, jdbcType=INTEGER},
+        #{lastYearGrantDate, jdbcType=TIMESTAMP},
+        #{grantedDays2, jdbcType=INTEGER},
+        #{numberOfRemainingPaidHolidays, jdbcType=DOUBLE},
+        ${registeredUserId},
+        now()
+        )
+
+        ON DUPLICATE KEY UPDATE
+        id = id,
+        employee_id = #{employeeId, jdbcType=INTEGER},
+        employee_name = #{employeeName, jdbcType=VARCHAR},
+        memo = #{memo, jdbcType=LONGVARCHAR},
+        working_date = #{workingDate, jdbcType=TIMESTAMP},
+        pay_for_results = #{payForResults, jdbcType=INTEGER},
+        work_time = #{workTime, jdbcType=INTEGER},
+        transportation_expenses = #{transportationExpenses, jdbcType=INTEGER},
+        dependents_number = #{dependentsNumber, jdbcType=INTEGER},
+        presence_or_absence_of_long_term_care_insurance = #{presenceOrAbsenceOfLongTermCareInsurance, jdbcType=VARCHAR},
+        holiday = #{holiday, jdbcType=DOUBLE},
+        qualification_reward = #{qualificationReward, jdbcType=INTEGER},
+        qualification_examination_fee = #{qualificationExaminationFee, jdbcType=INTEGER},
+        business_trip_costs_expenses = #{businessTripCostsExpenses, jdbcType=INTEGER},
+        overtime_hour = #{overtimeHour, jdbcType=DOUBLE},
+        holiday_work_hour = #{holidayWorkHour, jdbcType=DOUBLE},
+        night_shift = #{nightShift, jdbcType=DOUBLE},
+        technical_allowance_Instructor_fee = #{technicalAllowanceInstructorFee, jdbcType=INTEGER},
+        quantity = #{quantity, jdbcType=DOUBLE},
+        work_allowance = #{workAllowance, jdbcType=INTEGER},
+        advance_transportation_expenses = #{advanceTransportationExpenses, jdbcType=INTEGER},
+        zero_premiums_for_early_retirement = #{zeroPremiumsForEarlyRetirement, jdbcType=VARCHAR},
+        resident_tax = #{residentTax, jdbcType=INTEGER},
+        basic_salary = #{basicSalary, jdbcType=INTEGER},
+        standard_monthly_fee = #{standardMonthlyFee, jdbcType=INTEGER},
+        deemed_overtime_pay = #{deemedOvertimePay, jdbcType=INTEGER},
+        unit_price = #{unitPrice, jdbcType=INTEGER},
+        remarks = #{remarks, jdbcType=LONGVARCHAR},
+        offsetting_notes = #{offsettingNotes, jdbcType=LONGVARCHAR},
+        document_creator_employee_id = #{documentCreatorEmployeeId, jdbcType=INTEGER},
+        most_recent_grant_date = #{mostRecentGrantDate, jdbcType=TIMESTAMP},
+        granted_days = #{grantedDays, jdbcType=INTEGER},
+        last_year_grant_date = #{lastYearGrantDate, jdbcType=TIMESTAMP},
+        granted_days_2 = #{grantedDays2, jdbcType=INTEGER},
+        number_of_remaining_paid_holidays = #{numberOfRemainingPaidHolidays, jdbcType=DOUBLE},
+        update_user_id = #{registeredUserId},
+        update_date = now()
+    </insert>
+
+    <delete id="deleteById" parameterType="hashmap">
+        DELETE FROM nexus_end_of_processing WHERE id = #{id}
+    </delete>
+
+    <select id="findById" parameterType="hashmap" resultMap="NexusEndOfProcessingResultMap">
+        SELECT * FROM nexus_end_of_processing
+        <where>
+            id = ${id}
+        </where>
+    </select>
+
+    <select id="findByIds" parameterType="hashmap" resultMap="NexusEndOfProcessingResultMap">
+        SELECT * FROM nexus_end_of_processing
+        <where>
+            id IN
+            <foreach collection="idList" item="id" open="(" separator="," close=")">
+                ${id}
+            </foreach>
+        </where>
+        ORDER BY FIELD(id,
+        <foreach collection="idList" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </select>
+
+</mapper>

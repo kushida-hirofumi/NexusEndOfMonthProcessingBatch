@@ -1,0 +1,77 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.7'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.nexus'
+version = '0.0.1-SNAPSHOT'
+description = '月末処理関連のAPI'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+    lombokVersion='1.18.20'
+}
+
+dependencies {
+
+    /**
+     * バッチ関連
+     */
+    implementation('org.springframework.boot:spring-boot-starter-batch')
+    implementation('org.springframework.boot:spring-boot-starter-jdbc')
+
+
+    /**
+     * lombok
+     */
+    compileOnly('org.projectlombok:lombok:' + lombokVersion)
+    annotationProcessor('org.projectlombok:lombok:' + lombokVersion)
+    testCompileOnly('org.projectlombok:lombok:' + lombokVersion)
+    testAnnotationProcessor('org.projectlombok:lombok:' + lombokVersion)
+
+    //restTemplate
+    implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
+
+    implementation('org.apache.poi:poi:5.2.4')
+
+    //データバインディング用
+    implementation('com.fasterxml.jackson.core:jackson-databind')
+
+    //LocalDateのデータバインディング用
+    implementation('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
+
+    //文字列用
+    implementation('org.apache.commons:commons-lang3:3.0')
+    //文字列計算
+    implementation('net.objecthunter:exp4j:0.4.8')
+
+    /**
+     * データベース関連
+     */
+    implementation('com.mysql:mysql-connector-j:8.3.0')
+    implementation('org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3')
+    implementation('com.microsoft.sqlserver:mssql-jdbc:11.2.0.jre17')
+    implementation('com.zaxxer:HikariCP:4.0.3')
+    implementation('org.springframework.boot:spring-boot-starter-jdbc')
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+bootRun {
+    jvmArgs = ['-Dspring.profiles.active=debug']
+}

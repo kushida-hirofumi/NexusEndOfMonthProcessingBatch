@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.NexusEndOfMonthProcessingSheet02Mapper">
+    <resultMap id="NexusEndOfProcessingSheet02ResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusEndOfMonthProcessingSheet02Entity">
+        <result column="id" property="id"/>
+        <result column="employee_id" property="employeeId"/>
+        <result column="freee_id" property="freeeId"/>
+        <result column="company_short_name" property="companyShortName"/>
+        <result column="family_name" property="familyName"/>
+        <result column="first_name" property="firstName"/>
+        <result column="memo" property="memo"/>
+        <result column="working_date" property="workingDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="pay_for_results" property="payForResults"/>
+        <result column="commuting_allowance" property="commutingAllowance"/>
+        <result column="qualification_allowance" property="qualificationAllowance"/>
+        <result column="expenses" property="expenses"/>
+        <result column="customer_billing_expenses" property="customerBillingExpenses"/>
+        <result column="holiday" property="holiday"/>
+        <result column="overtime_hour" property="overtimeHour"/>
+        <result column="holiday_work_hour" property="holidayWorkHour"/>
+        <result column="night_shift" property="nightShift"/>
+        <result column="work_time" property="workTime"/>
+        <result column="hgb_money" property="hgbMoney"/>
+        <result column="hgb_company" property="hgbCompany"/>
+        <result column="quantity" property="quantity"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="site" property="site"/>
+        <result column="closing_date" property="closingDate"/>
+        <result column="delayed_payment_date" property="delayedPaymentDate"/>
+        <result column="excess" property="excess"/>
+        <result column="deduction" property="deduction"/>
+        <result column="standard_lower_limit" property="standardLowerLimit"/>
+        <result column="standard_upper_limit" property="standardUpperLimit"/>
+        <result column="upstream_company_name" property="upstreamCompanyName"/>
+        <result column="contractor_company_id" property="contractorCompanyId"/>
+        <result column="eg_company_name" property="egCompanyName"/>
+        <result column="month_end_processing_creation_company_name" property="monthEndProcessingCreationCompanyName"/>
+        <result column="document_creator_employee_id" property="documentCreatorEmployeeId"/>
+        <result column="half_affiliation_company_id" property="halfAffiliationCompanyId"/>
+        <result column="half_employee_id" property="halfEmployeeId"/>
+        <result column="counter_sales_employee_id" property="counterSalesEmployeeId"/>
+        <result column="number_of_paid_days_granted" property="numberOfPaidDaysGranted"/>
+        <result column="number_of_remaining_paid_holidays" property="numberOfRemainingPaidHolidays"/>
+        <result column="number_of_paid_uses" property="numberOfPaidUses"/>
+        <result column="payroll_flag" property="payrollFlag"/>
+        <result column="record_lock_flag" property="recordLockFlag"/>
+        <result column="invoice_file_id" property="invoiceFileId"/>
+        <result column="change_field_name_0" property="changeFieldName0"/>
+        <result column="change_field_name_1" property="changeFieldName1"/>
+        <result column="hidden_column_name_1" property="hiddenColumnName1"/>
+        <result column="registered_user_id" property="registeredUserId"/>
+        <result column="registered_date" property="registeredDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_date" property="updateDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusEndOfMonthProcessingSheet02Entity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO nexus_end_of_processing_sheet_02 (
+
+        <if test="id!=null">
+            id,
+        </if>
+        employee_id,
+        freee_id,
+        company_short_name,
+        <if test="familyName!=null and firstName!=null">
+            family_name,
+            first_name,
+        </if>
+        memo,
+        working_date,
+        pay_for_results,
+        commuting_allowance,
+        qualification_allowance,
+        expenses,
+        customer_billing_expenses,
+        holiday,
+        overtime_hour,
+        holiday_work_hour,
+        night_shift,
+        work_time,
+        HGB_money,
+        HGB_company,
+        quantity,
+        unit_price,
+        site,
+        closing_date,
+        delayed_payment_date,
+        excess,
+        deduction,
+        standard_lower_limit,
+        standard_upper_limit,
+        upstream_company_name,
+        contractor_company_id,
+        EG_company_name,
+        month_end_processing_creation_company_name,
+        document_creator_employee_id,
+        half_affiliation_company_id,
+        half_employee_id,
+        counter_sales_employee_id,
+        number_of_paid_days_granted,
+        number_of_remaining_paid_holidays,
+        number_of_paid_uses,
+        payroll_flag,
+        record_lock_flag,
+        registered_user_id,
+        registered_date
+
+        ) VALUE (
+
+        <if test="id!=null">
+            ${id},
+        </if>
+        #{employeeId, jdbcType=INTEGER},
+        #{freeeId, jdbcType=VARCHAR},
+        #{companyShortName, jdbcType=VARCHAR},
+        <if test="familyName!=null and firstName!=null">
+            #{familyName, jdbcType=VARCHAR},
+            #{firstName, jdbcType=VARCHAR},
+        </if>
+        #{memo, jdbcType=LONGVARCHAR},
+        #{workingDate, jdbcType=TIMESTAMP},
+        #{payForResults, jdbcType=INTEGER},
+        #{commutingAllowance, jdbcType=INTEGER},
+        #{qualificationAllowance, jdbcType=INTEGER},
+        #{expenses, jdbcType=INTEGER},
+        #{customerBillingExpenses, jdbcType=INTEGER},
+        #{holiday, jdbcType=DOUBLE},
+        #{overtimeHour, jdbcType=DOUBLE},
+        #{holidayWorkHour, jdbcType=DOUBLE},
+        #{nightShift, jdbcType=DOUBLE},
+        #{workTime, jdbcType=INTEGER},
+        #{hgbMoney, jdbcType=INTEGER},
+        #{hgbCompany, jdbcType=VARCHAR},
+        #{quantity, jdbcType=VARCHAR},
+        #{unitPrice, jdbcType=INTEGER},
+        #{site, jdbcType=VARCHAR},
+        #{closingDate, jdbcType=VARCHAR},
+        #{delayedPaymentDate, jdbcType=VARCHAR},
+        #{excess, jdbcType=INTEGER},
+        #{deduction, jdbcType=INTEGER},
+        #{standardLowerLimit, jdbcType=INTEGER},
+        #{standardUpperLimit, jdbcType=INTEGER},
+        #{upstreamCompanyName, jdbcType=VARCHAR},
+        #{contractorCompanyId, jdbcType=INTEGER},
+        #{egCompanyName, jdbcType=VARCHAR},
+        #{monthEndProcessingCreationCompanyName, jdbcType=VARCHAR},
+        #{documentCreatorEmployeeId, jdbcType=INTEGER},
+        #{halfAffiliationCompanyId, jdbcType=VARCHAR},
+        #{halfEmployeeId, jdbcType=INTEGER},
+        #{counterSalesEmployeeId, jdbcType=INTEGER},
+        #{numberOfPaidDaysGranted, jdbcType=INTEGER},
+        #{numberOfRemainingPaidHolidays, jdbcType=DOUBLE},
+        #{numberOfPaidUses, jdbcType=DOUBLE},
+        #{payrollFlag, jdbcType=TINYINT},
+        #{recordLockFlag, jdbcType=TINYINT},
+        ${registeredUserId},
+        now()
+        )
+    </insert>
+
+    <update id="update" parameterType="hashmap">
+        UPDATE nexus_end_of_processing_sheet_02 SET
+
+        employee_id = #{employeeId, jdbcType=INTEGER},
+        freee_id = #{freeeId, jdbcType=VARCHAR},
+        company_short_name = #{companyShortName, jdbcType=VARCHAR},
+        <if test="familyName!=null and firstName!=null">
+            family_name = #{familyName, jdbcType=VARCHAR},
+            first_name = #{firstName, jdbcType=VARCHAR},
+        </if>
+        memo = #{memo, jdbcType=LONGVARCHAR},
+        working_date = #{workingDate, jdbcType=TIMESTAMP},
+        pay_for_results = #{payForResults, jdbcType=INTEGER},
+        commuting_allowance = #{commutingAllowance, jdbcType=INTEGER},
+        qualification_allowance = #{qualificationAllowance, jdbcType=INTEGER},
+        expenses = #{expenses, jdbcType=INTEGER},
+        customer_billing_expenses = #{customerBillingExpenses, jdbcType=INTEGER},
+        holiday = #{holiday, jdbcType=DOUBLE},
+        overtime_hour = #{overtimeHour, jdbcType=DOUBLE},
+        holiday_work_hour = #{holidayWorkHour, jdbcType=DOUBLE},
+        night_shift =  #{nightShift, jdbcType=DOUBLE},
+        work_time = #{workTime, jdbcType=INTEGER},
+        HGB_money = #{hgbMoney, jdbcType=INTEGER},
+        HGB_company = #{hgbCompany, jdbcType=VARCHAR},
+        quantity = #{quantity, jdbcType=VARCHAR},
+        unit_price = #{unitPrice, jdbcType=INTEGER},
+        site = #{site, jdbcType=VARCHAR},
+        closing_date = #{closingDate, jdbcType=VARCHAR},
+        delayed_payment_date = #{delayedPaymentDate, jdbcType=VARCHAR},
+        excess = #{excess, jdbcType=INTEGER},
+        deduction = #{deduction, jdbcType=INTEGER},
+        standard_lower_limit = #{standardLowerLimit, jdbcType=INTEGER},
+        standard_upper_limit = #{standardUpperLimit, jdbcType=INTEGER},
+        upstream_company_name = #{upstreamCompanyName, jdbcType=VARCHAR},
+        contractor_company_id = #{contractorCompanyId, jdbcType=INTEGER},
+        EG_company_name = #{egCompanyName, jdbcType=VARCHAR},
+        month_end_processing_creation_company_name = #{monthEndProcessingCreationCompanyName, jdbcType=VARCHAR},
+        document_creator_employee_id = #{documentCreatorEmployeeId, jdbcType=INTEGER},
+        half_affiliation_company_id = #{halfAffiliationCompanyId, jdbcType=VARCHAR},
+        half_employee_id = #{halfEmployeeId, jdbcType=INTEGER},
+        counter_sales_employee_id = #{counterSalesEmployeeId, jdbcType=INTEGER},
+        number_of_paid_days_granted = #{numberOfPaidDaysGranted, jdbcType=INTEGER},
+        number_of_remaining_paid_holidays = #{numberOfRemainingPaidHolidays, jdbcType=DOUBLE},
+        number_of_paid_uses = #{numberOfPaidUses, jdbcType=DOUBLE},
+        payroll_flag = #{payrollFlag, jdbcType=TINYINT},
+        record_lock_flag = #{recordLockFlag, jdbcType=TINYINT},
+        update_user_id = #{updateUserId},
+        update_date = now()
+
+        WHERE id = ${id}
+    </update>
+
+    <select id="findAll" resultMap="NexusEndOfProcessingSheet02ResultMap">
+        SELECT * FROM nexus_end_of_processing_sheet_02
+    </select>
+
+    <select id="findByEmployeeIdsAndWorkingDate" parameterType="hashmap" resultMap="NexusEndOfProcessingSheet02ResultMap">
+        SELECT * FROM nexus_end_of_processing_sheet_02
+        <where>
+            employee_id IN
+            <foreach collection="employeeIds" item="employeeId" open="(" separator="," close=")">
+                #{employeeId}
+            </foreach>
+            AND working_date = #{workingDate}
+        </where>
+    </select>
+</mapper>

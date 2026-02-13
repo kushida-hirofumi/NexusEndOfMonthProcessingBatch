@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.NexusHolidayInfoMapper">
+
+    <resultMap id="NexusHolidayInfoResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusHolidayInfoEntity">
+        <result column="holiday_month_day" property="holidayMonthDay" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTypeHandler"/>
+        <result column="holiday_name" property="holidayName"/>
+        <result column="registered_user_id" property="registeredUserId"/>
+        <result column="registered_date" property="registeredDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_date" property="updateDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <insert id="insertList" parameterType="hashmap">
+
+        INSERT INTO nexus_holiday_info (
+
+        holiday_month_day,
+        holiday_name,
+        registered_user_id,
+        registered_date
+
+        ) VALUES
+        <foreach collection="entities" item="entity" index="index" separator=",">
+            (
+            #{entity.holidayMonthDay},
+            #{entity.holidayName},
+            ${entity.registeredUserId},
+            now()
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        holiday_name = VALUES(holiday_name),
+        update_user_id = VALUES(registered_user_id),
+        update_date = now()
+    </insert>
+
+    <select id="findByHolidayMonthDay" parameterType="hashmap" resultMap="NexusHolidayInfoResultMap">
+        SELECT *
+        FROM nexus_holiday_info
+        <where>
+            holiday_month_day = #{date}
+        </where>
+    </select>
+
+</mapper>

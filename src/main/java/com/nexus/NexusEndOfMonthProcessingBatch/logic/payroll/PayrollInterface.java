@@ -1,0 +1,8 @@
+package com.nexus.NexusEndOfMonthProcessingBatch.logic.payroll;
+
+import com.nexus.NexusEndOfMonthProcessingBatch.logic.payroll.payroll_basic.PayrollDetailsBasicInterface;
+import com.nexus.NexusEndOfMonthProcessingBatch.logic.payroll.payroll_invoice.PayrollDetailsInvoiceInterface;
+import com.nexus.NexusEndOfMonthProcessingBatch.logic.payroll.payroll_sub.PayrollDetailsSubInterface;
+
+public interface PayrollInterface extends PayrollDetailsBasicInterface, PayrollDetailsSubInterface, PayrollDetailsInvoiceInterface {
+}

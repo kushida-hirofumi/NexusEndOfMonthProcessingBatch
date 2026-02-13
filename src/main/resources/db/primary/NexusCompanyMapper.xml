@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.NexusCompanyMapper">
+
+    <resultMap id="NexusCompanyResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusCompanyEntity">
+        <result column="company_id" property="companyId"/>
+        <result column="group_company_id" property="groupCompanyId"/>
+        <result column="company_name" property="companyName"/>
+        <result column="postal_code" property="postalCode"/>
+        <result column="company_address1" property="companyAddress1"/>
+        <result column="company_address2" property="companyAddress2"/>
+        <result column="building_name" property="buildingName"/>
+        <result column="phone_number" property="phoneNumber"/>
+        <result column="fax" property="fax"/>
+        <result column="homepage_url" property="homepageUrl"/>
+        <result column="abbreviation" property="abbreviation"/>
+        <result column="square_stamp" property="squareStamp"/>
+        <result column="bank_account_number" property="bankAccountNumber"/>
+        <result column="bank_account_name" property="bankAccountName"/>
+        <result column="eligible_bill_location_number" property="eligibleBillLocationNumber"/>
+        <result column="company_ceo_id" property="companyCeoId"/>
+        <result column="company_role" property="companyRole"/>
+        <result column="registered_user_id" property="registeredUserId"/>
+        <result column="registered_date" property="registeredDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_date" property="updateDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <select id="findById" parameterType="hashmap" resultMap="NexusCompanyResultMap">
+        SELECT * FROM nexus_company WHERE company_id = ${id}
+    </select>
+
+    <select id="findByCompanyName" parameterType="hashmap" resultMap="NexusCompanyResultMap">
+        SELECT * FROM nexus_company WHERE company_name = #{companyName}
+    </select>
+
+
+</mapper>

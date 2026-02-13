@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.InsuranceAndPensionTableMapper">
+
+    <resultMap id="InsuranceAndPensionTableResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.InsuranceAndPensionTableEntity">
+        <result column="year" property="year"/>
+        <result column="consumption_tax" property="consumptionTax"/>
+        <result column="prefectural_insurance_premium_rates" property="prefecturalInsurancePremiumRates"/>
+        <result column="long_term_care_insurance_premium_rates" property="longTermCareInsurancePremiumRates"/>
+        <result column="employee_pension_insurance_premium_rates" property="employeePensionInsurancePremiumRates"/>
+        <result column="employee_paid_employment_insurance_premium_rates" property="employeePaidEmploymentInsurancePremiumRates"/>
+        <result column="employer_paid_employment_insurance_premium_rates" property="employerPaidEmploymentInsurancePremiumRates"/>
+        <result column="labor_insurance_premium_rates" property="laborInsurancePremiumRates"/>
+        <result column="child_welfare_allowance_contribution_rates" property="childWelfareAllowanceContributionRates"/>
+        <result column="registered_user_id" property="registeredUserId"/>
+        <result column="registered_date" property="registeredDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_date" property="updateDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <select id="findByYearList" parameterType="hashmap" resultMap="InsuranceAndPensionTableResultMap">
+        SELECT *
+        FROM insurance_and_pension_table
+        <where>
+            year IN (
+            <foreach collection="yearList" item="year" separator=",">
+                ${year}
+            </foreach>
+            )
+        </where>
+    </select>
+
+</mapper>
