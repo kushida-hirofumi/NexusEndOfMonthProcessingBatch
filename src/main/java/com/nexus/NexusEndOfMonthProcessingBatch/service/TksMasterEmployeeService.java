@@ -24,9 +24,4 @@ public class TksMasterEmployeeService {
         return tksMasterEmployeeMapper.findByIds(idList);
     }
 
-    public List<TksMasterEmployeeEntity> findByMailAddressList(List<String> mailAddressList) {
-        if(mailAddressList ==null || mailAddressList.isEmpty()) return new ArrayList<>();
-        return tksMasterEmployeeMapper.findByMailAddressList(mailAddressList);
-    }
-
 }

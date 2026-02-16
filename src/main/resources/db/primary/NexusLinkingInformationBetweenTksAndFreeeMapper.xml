@@ -36,18 +36,6 @@
         update_date = NOW()
     </insert>
 
-    <select id="findByTksIds" parameterType="hashmap" resultMap="NexusLinkingInformationBetweenTksAndFreeeResultMap">
-        SELECT *
-        FROM nexus_linking_information_between_tks_and_freee
-        <where>
-            tks_data IN (
-            <foreach collection="tksIds" item="tksId" separator=",">
-                ${tksId}
-            </foreach>
-            )
-        </where>
-    </select>
-
     <select id="findAll" resultMap="NexusLinkingInformationBetweenTksAndFreeeResultMap">
         SELECT * FROM nexus_linking_information_between_tks_and_freee
     </select>

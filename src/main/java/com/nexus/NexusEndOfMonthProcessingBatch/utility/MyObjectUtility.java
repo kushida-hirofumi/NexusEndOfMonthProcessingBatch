@@ -1,11 +1,13 @@
 package com.nexus.NexusEndOfMonthProcessingBatch.utility;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
+@Slf4j
 public class MyObjectUtility {
 
     /**
@@ -27,7 +29,7 @@ public class MyObjectUtility {
                 refCls = refCls.getSuperclass();
             } while (refCls != null);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.warn(e.getMessage());
             return null;
         }
         return hashMap;
@@ -36,7 +38,7 @@ public class MyObjectUtility {
     public static Field getField(Object object,String fieldName) {
         if(object==null) return null;
         Class<?> refCls = object.getClass();
-        if(refCls==null || StringUtils.isBlank(fieldName)) return null;
+        if(StringUtils.isBlank(fieldName)) return null;
         do {
             for(Field field : refCls.getDeclaredFields()) {
                 if(field.getName().equals(fieldName)) {

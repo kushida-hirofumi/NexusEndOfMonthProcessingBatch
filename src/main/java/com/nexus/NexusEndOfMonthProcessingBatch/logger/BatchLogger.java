@@ -26,10 +26,6 @@ public class BatchLogger {
                 " [開始時刻:" + MyDateUtility.localDateTimeToString(startLdt, "yyyy/MM/dd  a  hh:mm") + "] [対応件数:" + max + "]");
     }
 
-    public void print(String message) {
-        customLogger.print(message);
-    }
-
     public void addSuccessCounter() {
         successCounter++;
     }

@@ -50,15 +50,4 @@ public class InsuranceAndPensionTableEntity {
         return Math.floor(value * (consumptionTax / 100));
     }
 
-    /**
-     * 小数点0以下は切り捨て
-     * @return
-     */
-    public String zeroConsumptionTax() {
-        if (consumptionTax % 1 == 0) {
-            return "" + (int) consumptionTax; // または long でもOK
-        } else {
-            return "" + consumptionTax;
-        }
-    }
 }

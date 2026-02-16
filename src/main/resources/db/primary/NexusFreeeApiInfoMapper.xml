@@ -54,12 +54,4 @@
         </where>
     </select>
 
-    <select id="findByCompanyName" parameterType="hashmap" resultMap="NexusFreeeApiInfoResultMap">
-        SELECT * FROM nexus_freee_api_info
-        <where>
-            delete_flg = false
-            AND company_name = #{companyName}
-        </where>
-    </select>
-
 </mapper>

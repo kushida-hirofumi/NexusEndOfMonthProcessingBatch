@@ -23,11 +23,6 @@ public class NexusLinkingInformationBetweenTksAndFreeeService {
         return mapper.insertList(entityList);
     }
 
-    public List<NexusLinkingInformationBetweenTksAndFreeeEntity> findByTksIds(List<Integer> tksIds) {
-        if(tksIds==null || tksIds.isEmpty()) return new ArrayList<>();
-        return mapper.findByTksIds(tksIds);
-    }
-
     public List<NexusLinkingInformationBetweenTksAndFreeeEntity> findAll() {
         return mapper.findAll();
     }

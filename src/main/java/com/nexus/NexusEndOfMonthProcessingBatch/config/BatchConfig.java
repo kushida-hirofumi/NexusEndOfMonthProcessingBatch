@@ -11,7 +11,6 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.repeat.RepeatContext;
 import org.springframework.batch.repeat.exception.ExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,14 +70,10 @@ public class BatchConfig {
     }
 
     private ExceptionHandler exceptionHandler() {
-        return new ExceptionHandler() {
-
-            @Override
-            public void handleException(RepeatContext context, Throwable throwable) throws Throwable {
-                customLogger.print(throwable.getMessage());
-                // 例外を投げず、終了する
-                context.setTerminateOnly();
-            }
+        return (context, throwable) -> {
+            customLogger.print(throwable.getMessage());
+            // 例外を投げず、終了する
+            context.setTerminateOnly();
         };
     }
 

@@ -6,15 +6,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Mapper
 @Transactional(PrimaryDbConfig.TRANSACTION_MANAGER_BEAN)
 public interface NexusEndOfMonthProcessingScoreMapper {
     void deleteScoreById(@Param("id") Integer id);
 
     void insert(NexusEndOfMonthProcessing01Entity entity);
-
-    List<NexusEndOfMonthProcessing01Entity> findByTransferDueDate(@Param("workingDate") LocalDate workingDate);
 }

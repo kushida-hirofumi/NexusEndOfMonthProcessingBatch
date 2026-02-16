@@ -1,5 +1,6 @@
 package com.nexus.NexusEndOfMonthProcessingBatch.utility;
 
+import lombok.extern.slf4j.Slf4j;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 /**
  * 数値関連の処理のユーティリティ
  */
+@Slf4j
 public class MyNumberUtility {
 
     public static int nullCheckInt(Integer value) {
@@ -47,7 +49,7 @@ public class MyNumberUtility {
                     else hashMap.put(fieldName, "0");
                 }
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                log.warn(e.getMessage());
             }
         } while (true);
         exp = format;
@@ -58,7 +60,7 @@ public class MyNumberUtility {
             Expression expression = new ExpressionBuilder(exp).build();
             return expression.evaluate();
         } catch (ArithmeticException | IllegalArgumentException e) {
-            e.printStackTrace();
+            log.warn(e.getMessage());
             return 0;
         }
     }

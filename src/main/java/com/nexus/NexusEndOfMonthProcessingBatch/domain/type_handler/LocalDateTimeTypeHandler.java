@@ -1,5 +1,6 @@
 package com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
@@ -18,6 +19,7 @@ import java.util.Locale;
 /**
  * LocalDateTimeクラスのタイプハンドラー
  */
+@Slf4j
 public class LocalDateTimeTypeHandler extends BaseTypeHandler<LocalDateTime> {
 
     public static final String LOCAL_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
@@ -31,7 +33,7 @@ public class LocalDateTimeTypeHandler extends BaseTypeHandler<LocalDateTime> {
         try {
             return LocalDateTime.ofInstant(new SimpleDateFormat(LOCAL_DATE_TIME_FORMAT).parse(str).toInstant(), ZoneId.systemDefault());
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return null;
         }
     }

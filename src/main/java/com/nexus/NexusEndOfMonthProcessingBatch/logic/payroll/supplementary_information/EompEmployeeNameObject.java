@@ -15,8 +15,4 @@ public class EompEmployeeNameObject {
         this.employeeSimpleName = StringUtils.isBlank(employeeSimpleName) ? "" : employeeSimpleName;
     }
 
-    public EompEmployeeNameObject(EompSupplementaryInfoData eompSupplementaryInfoData) {
-        this.jointName = eompSupplementaryInfoData.getEmployeeName();
-        this.employeeSimpleName = eompSupplementaryInfoData.getFamilyName() + " " + eompSupplementaryInfoData.getFirstName();
-    }
 }

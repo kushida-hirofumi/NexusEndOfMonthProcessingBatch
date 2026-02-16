@@ -39,10 +39,6 @@ public class NexusFreeeApiInfoService {
         return nexusFreeeApiInfoMapper.findAll();
     }
 
-    public NexusFreeeApiInfoEntity findByCompanyName(String companyName) {
-        return nexusFreeeApiInfoMapper.findByCompanyName(companyName);
-    }
-
     /**
      * アクセストークン更新処理
      * @param entity    FreeeApi情報エンティティ
