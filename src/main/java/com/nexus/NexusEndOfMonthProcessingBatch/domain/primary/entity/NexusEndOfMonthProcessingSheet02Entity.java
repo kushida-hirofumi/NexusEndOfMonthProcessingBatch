@@ -190,11 +190,4 @@ public class NexusEndOfMonthProcessingSheet02Entity extends ToCreateInvoicesInte
         return result;
     }
 
-    /**
-     * 月末処理画面のレコードのTOPに表示させる
-     * @return
-     */
-    public String topColumn() {
-        return !StringUtils.isBlank(freeeId) ? freeeId : companyShortName;
-    }
 }

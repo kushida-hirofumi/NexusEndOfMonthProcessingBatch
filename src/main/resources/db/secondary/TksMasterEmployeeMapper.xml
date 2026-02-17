@@ -65,17 +65,4 @@
         LTRIM(RTRIM( ${trimSqlParam} ))
     </sql>
 
-    <select id="findByMailAddressList" parameterType="hashmap" resultMap="TksMasterEmployeeResultMap">
-        <include refid="selectSql">
-        </include>
-        <where>
-            0 = emp.DeleteFlag AND 0 = eng.DeleteFlag AND 0 = sal.DeleteFlag AND 0 = salEmp.DeleteFlag
-            AND (emp.FamilyName IS NOT NULL  AND  emp.FirstName IS NOT NULL)
-            AND emp.MailAddress_PC IN
-            <foreach collection="mailAddressList" item="mailAddress" open="(" separator="," close=")">
-                #{mailAddress}
-            </foreach>
-        </where>
-    </select>
-
 </mapper>

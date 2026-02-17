@@ -3,9 +3,10 @@ package com.nexus.NexusEndOfMonthProcessingBatch.utility;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.chrono.JapaneseDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -82,18 +83,6 @@ public class MyDateUtility {
         JapaneseDate japaneseDate = JapaneseDate.of(ld.getYear(), ld.getMonthValue(), ld.getDayOfMonth());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format, locale);
         return japaneseDate.format(formatter);
-    }
-
-    /**
-     * 文字列をLocalDateTimeに変換する
-     */
-    public static LocalDateTime parseStringToLocalDateTime(String str, String format) throws ParseException {
-        if (StringUtils.isBlank(str)) return null;
-        if (str.split("T").length == 2 || format.split("T").length == 2) {
-            str = str.split("T")[0] + " " + str.split("T")[1];
-            format = format.split("T")[0] + " " + format.split("T")[1];
-        }
-        return LocalDateTime.ofInstant(new SimpleDateFormat(format).parse(str).toInstant(), ZoneId.systemDefault());
     }
 
 }

@@ -10,5 +10,4 @@ import java.util.List;
 public interface TksMasterEmployeeMapper {
     TksMasterEmployeeEntity findById(@Param("id") int id);
     List<TksMasterEmployeeEntity> findByIds(@Param("idList") List<Integer> idList);
-    List<TksMasterEmployeeEntity> findByMailAddressList(@Param("mailAddressList") List<String> mailAddressList);
 }

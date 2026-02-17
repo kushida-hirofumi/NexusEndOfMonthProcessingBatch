@@ -17,13 +17,4 @@
         VALUE ( ${recordId}, #{transferDueDate} )
     </insert>
 
-    <select id="findByTransferDueDate" parameterType="hashmap" resultMap="NexusEndOfMonthProcessingScoreResultMap">
-        SELECT *
-        FROM nexus_end_of_month_processing_01
-        <where>
-            DATE_FORMAT(transfer_due_date, '%Y%m') = DATE_FORMAT(#{workingDate}, '%Y%m')
-        </where>
-        ORDER BY transfer_due_date ASC
-    </select>
-
 </mapper>

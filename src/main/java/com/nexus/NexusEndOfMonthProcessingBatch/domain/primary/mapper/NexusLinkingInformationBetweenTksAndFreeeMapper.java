@@ -16,7 +16,6 @@ import java.util.List;
 @Transactional(PrimaryDbConfig.TRANSACTION_MANAGER_BEAN)
 public interface NexusLinkingInformationBetweenTksAndFreeeMapper {
     int insertList(@Param("entities") List<NexusLinkingInformationBetweenTksAndFreeeEntity> entityList);
-    List<NexusLinkingInformationBetweenTksAndFreeeEntity> findByTksIds(@Param("tksIds") List<Integer> tksIds);
     List<NexusLinkingInformationBetweenTksAndFreeeEntity> findAll();
     List<NexusLinkingInformationBetweenTksAndFreeeEntity> findByFreeeIdList(List<String> freeeIdList);
 }

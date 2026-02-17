@@ -41,7 +41,7 @@ public class FreeeApiRestTemplateTest {
     FreeeApiPublicTokenDto freeeApiPublicTokenDto;
 
     @BeforeEach
-    public void setUp() throws JsonProcessingException {
+    public void setUp() {
         nexusFreeeApiInfoEntities = new ArrayList<>();
         NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity = new NexusFreeeApiInfoEntity();
         nexusFreeeApiInfoEntity.setClientId("00001");
