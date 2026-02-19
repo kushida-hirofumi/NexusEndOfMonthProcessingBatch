@@ -78,16 +78,31 @@ public class FreeeApiRestTemplate {
     }
 
     /**
+     * URL内のパスパラメータを値に変換する処理を行う
+     * @param path
+     * @param map
+     * @return
+     */
+    String convertUrlPath(String path, Map<String, Object> map) {
+        for(String key : map.keySet()) {
+            String val = "{" + key + "}";
+            if(path.contains(val)) path = path.replace(val, map.get(key).toString());
+        }
+        return path;
+    }
+
+    /**
      * Getのパスにリクエストパラメータを付与する処理を行う
      * @param pathListEnum  リクエストパス
      * @param requestParam  リクエストパラメータオブジェクト
      * @return  生成したURL
      */
-    String generateUrl(FreeeApiConstant.PathListEnum pathListEnum, Object requestParam) throws JsonProcessingException {
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(pathListEnum.getPath());
+    public String generateUrl(FreeeApiConstant.PathListEnum pathListEnum, Object requestParam) throws JsonProcessingException {
         String json = convertToJson(requestParam);
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(json, Map.class);
+        String convertedPath = convertUrlPath(pathListEnum.getPath(), map);
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(convertedPath);
         for(String key : map.keySet()) {
             uriComponentsBuilder.queryParam(key, map.get(key));
         }

@@ -2,10 +2,12 @@ package com.nexus.NexusEndOfMonthProcessingBatch.freee_api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusFreeeApiInfoEntity;
+import com.nexus.NexusEndOfMonthProcessingBatch.freee_api.test_data.FreeeApiRestTemplateTestUtility;
 import com.nexus.NexusEndOfMonthProcessingBatch.infrastructure.freee_api.constant.FreeeApiConstant;
 import com.nexus.NexusEndOfMonthProcessingBatch.infrastructure.freee_api.public_model.dto.FreeeApiPublicTokenDto;
 import com.nexus.NexusEndOfMonthProcessingBatch.infrastructure.freee_api.public_model.request_body.FreeeApiPublicAccessTokenRequestBody;
 import com.nexus.NexusEndOfMonthProcessingBatch.infrastructure.freee_api.rest_template.FreeeApiRestTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,42 +19,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
+/**
+ * FreeeApiのアクセストークン取得APIのテスト
+ */
 @ExtendWith(MockitoExtension.class)
-@DisplayName("FreeeApiRestTemplate テスト")
-public class FreeeApiRestTemplateTest {
+@DisplayName("FreeeApiRestTemplate  アクセストークン取得APIのテスト")
+@Slf4j
+public class FreeeApiAccessTokenTest {
+
+    static final String API_NAME = "アクセストークン取得API";
 
     @InjectMocks
     FreeeApiRestTemplate freeeApiRestTemplate;
 
-    List<NexusFreeeApiInfoEntity> nexusFreeeApiInfoEntities;
-
     //アクセストークン更新APIのリクエストボディ
-    FreeeApiPublicAccessTokenRequestBody freeeApiPublicAccessTokenRequestBody;
+    FreeeApiPublicAccessTokenRequestBody requestBody;
 
     //アクセストークン更新APIのレスポンス
-    FreeeApiPublicTokenDto freeeApiPublicTokenDto;
+    FreeeApiPublicTokenDto responseBody;
 
     @BeforeEach
     public void setUp() {
-        nexusFreeeApiInfoEntities = new ArrayList<>();
-        NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity = new NexusFreeeApiInfoEntity();
-        nexusFreeeApiInfoEntity.setClientId("00001");
-        nexusFreeeApiInfoEntity.setClientSecret("00001");
-        nexusFreeeApiInfoEntity.setRefreshToken("Afgeag43t");
-        nexusFreeeApiInfoEntity.setAccessToken("S34tujh3aa");
-        nexusFreeeApiInfoEntities.add(nexusFreeeApiInfoEntity);
 
-        freeeApiPublicAccessTokenRequestBody = FreeeApiPublicAccessTokenRequestBody.createRefreshToken(nexusFreeeApiInfoEntity.getClientId(), nexusFreeeApiInfoEntity.getClientSecret(), nexusFreeeApiInfoEntity.getRefreshToken());
+        NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity = FreeeApiRestTemplateTestUtility.getNexusFreeeApiInfoEntity().get(0);
+        requestBody = FreeeApiPublicAccessTokenRequestBody.createRefreshToken(nexusFreeeApiInfoEntity.getClientId(), nexusFreeeApiInfoEntity.getClientSecret(), nexusFreeeApiInfoEntity.getRefreshToken());
 
-        freeeApiPublicTokenDto = new FreeeApiPublicTokenDto() {{
+        responseBody = new FreeeApiPublicTokenDto() {{
             setAccessToken("aafg44gg");
             setRefreshToken("Dgery54e3rae");
         }};
@@ -65,7 +62,7 @@ public class FreeeApiRestTemplateTest {
      * @param exception     発生すべき例外
      * @throws JsonProcessingException
      */
-    void mockAccessToken(FreeeApiPublicAccessTokenRequestBody requestBody, FreeeApiPublicTokenDto responseBody, Exception exception) throws JsonProcessingException {
+    void createMock(FreeeApiPublicAccessTokenRequestBody requestBody, FreeeApiPublicTokenDto responseBody, Exception exception) throws JsonProcessingException {
 
         // 送信するリクエストボディ
         String jsonRequestBody = freeeApiRestTemplate.convertToJson(requestBody);
@@ -90,24 +87,24 @@ public class FreeeApiRestTemplateTest {
     }
 
     @Test
-    @DisplayName("accessToken_正常系")
+    @DisplayName(API_NAME + "_正常系")
     public void success() throws Exception {
 
-        mockAccessToken(freeeApiPublicAccessTokenRequestBody, freeeApiPublicTokenDto, null);
+        createMock(requestBody, responseBody, null);
 
-        FreeeApiPublicTokenDto responseUser = freeeApiRestTemplate.accessToken(freeeApiPublicAccessTokenRequestBody);
+        FreeeApiPublicTokenDto responseUser = freeeApiRestTemplate.accessToken(requestBody);
 
         assertNotNull(responseUser);
 
-        assertEquals(freeeApiPublicTokenDto.getAccessToken(), responseUser.getAccessToken());
-        assertEquals(freeeApiPublicTokenDto.getRefreshToken(), responseUser.getRefreshToken());
+        assertEquals(responseBody.getAccessToken(), responseUser.getAccessToken());
+        assertEquals(responseBody.getRefreshToken(), responseUser.getRefreshToken());
     }
 
     @Test
-    @DisplayName("accessToken_異常系_リクエストボディnull")
+    @DisplayName(API_NAME + "_異常系_リクエストボディnull")
     public void requestBodyNull() throws Exception {
 
-        mockAccessToken(freeeApiPublicAccessTokenRequestBody, freeeApiPublicTokenDto, null);
+        createMock(requestBody, responseBody, null);
 
         FreeeApiPublicTokenDto responseUser = freeeApiRestTemplate.accessToken(null);
 
@@ -115,13 +112,13 @@ public class FreeeApiRestTemplateTest {
     }
 
     @Test
-    @DisplayName("accessToken_異常系_リフレッシュトークンが違う")
+    @DisplayName(API_NAME + "_異常系_リフレッシュトークンが違う")
     public void refreshTokenErr() throws Exception {
 
-        mockAccessToken(freeeApiPublicAccessTokenRequestBody, freeeApiPublicTokenDto, new Exception(""));
+        createMock(requestBody, responseBody, new Exception(""));
 
-        freeeApiPublicAccessTokenRequestBody.setRefreshToken("afger4");
-        AssertionError ex =  assertThrows(AssertionError.class, () -> freeeApiRestTemplate.accessToken(freeeApiPublicAccessTokenRequestBody));
+        requestBody.setRefreshToken("afger4");
+        AssertionError ex =  assertThrows(AssertionError.class, () -> freeeApiRestTemplate.accessToken(requestBody));
         assertTrue(ex.getMessage().contains("refresh_token"));
     }
 
