@@ -93,6 +93,9 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
     FreeeApiRestTemplate freeeApiRestTemplate;
 
     @Autowired
+    NexusFreeeHumanResourcesAndLaborInfoService nexusFreeeHumanResourcesAndLaborInfoService;
+
+    @Autowired
     CustomLogger customLogger;
 
     @Override
@@ -153,8 +156,10 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
                 paymentDate);
         List<EompSheet2EntityCollection> eompSheet2EntityCollectionList = eompEntityCollectionSource.createEndOfMonthProcessingSheet2EntityCollectionList(nexusEndOfMonthProcessingSheet02Entities);
 
-        //利益一覧
+        //利益一覧のエンティティ
         List<NexusProfitListSummaryEntity> nexusProfitListSummaryEntityList = new ArrayList<>();
+        //Freeeの人事労務情報のエンティティ
+        List<NexusFreeeHumanResourcesAndLaborInfoEntity> nexusFreeeHumanResourcesAndLaborInfoEntityList = new ArrayList<>();
 
         for(FreeeCompanyData freeeCompanyData : freeeCompanyDataList) {
             TksMasterCompanyEntity tksMasterCompanyEntity = tksMasterCompanyEntityList.stream()
@@ -186,6 +191,8 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
                         tksMasterCompanyEntity,
                         tksMasterEmployeeEntity);
                 if(nexusProfitListSummaryEntity.getEmployeeId()!=0) nexusProfitListSummaryEntityList.add(nexusProfitListSummaryEntity);
+
+                nexusFreeeHumanResourcesAndLaborInfoEntityList.add(createNexusFreeeHumanResourcesAndLaborInfoEntity(freeeEmployeeData.freeeApiEmployeePayrollStatementsDto));
             }
         }
 
@@ -193,6 +200,10 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
         for(NexusProfitListSummaryEntity nexusProfitListsummaryEntity : nexusProfitListSummaryEntityList) {
             if(nexusProfitListSummaryService.insert(nexusProfitListsummaryEntity)>0) batchLogger.addSuccessCounter();
         }
+        batchLogger.finish();
+
+        batchLogger = new BatchLogger(customLogger, "FreeeApiから取得した給与明細情報で本アプリのFreeeの人事労務情報を登録  登録会社: " + nexusFreeeApiInfoEntity.getCompanyName(), nexusFreeeHumanResourcesAndLaborInfoEntityList.size());
+        batchLogger.addSuccessCounterValue(nexusFreeeHumanResourcesAndLaborInfoService.insertList(nexusFreeeHumanResourcesAndLaborInfoEntityList));
         batchLogger.finish();
 
     }
@@ -271,5 +282,26 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
             result.addAll(freeeApiHrEmployeePayrollStatementsListDto.getEmployeePayrollStatements());
         } while (true);
         return result;
+    }
+
+    /**
+     * FreeeApiから取得した給与明細情報からエンティティ生成
+     * @param employeePayrollStatementsListDto  給与明細情報
+     * @return  エンティティ
+     */
+    NexusFreeeHumanResourcesAndLaborInfoEntity createNexusFreeeHumanResourcesAndLaborInfoEntity(FreeeApiHrEmployeePayrollStatementsListDto.EmployeePayrollStatements employeePayrollStatementsListDto) {
+        NexusFreeeHumanResourcesAndLaborInfoEntity nexusFreeeHumanResourcesAndLaborInfoEntity = new NexusFreeeHumanResourcesAndLaborInfoEntity();
+        //FreeeID
+        nexusFreeeHumanResourcesAndLaborInfoEntity.setFreeeId(employeePayrollStatementsListDto.getEmployeeNum());
+        //支払日
+        nexusFreeeHumanResourcesAndLaborInfoEntity.setPayDate(employeePayrollStatementsListDto.getPayDate());
+        //基本給
+        nexusFreeeHumanResourcesAndLaborInfoEntity.setBasicSalary((int) employeePayrollStatementsListDto.getBasicPayAmount());
+        //業務手当
+        nexusFreeeHumanResourcesAndLaborInfoEntity.setBusinessAllowances((int) employeePayrollStatementsListDto.getWorkAllowance());
+        //職務手当
+        nexusFreeeHumanResourcesAndLaborInfoEntity.setJobAllowance((int) employeePayrollStatementsListDto.getJobAllowance());
+        nexusFreeeHumanResourcesAndLaborInfoEntity.setRegisteredUserId(0);
+        return nexusFreeeHumanResourcesAndLaborInfoEntity;
     }
 }

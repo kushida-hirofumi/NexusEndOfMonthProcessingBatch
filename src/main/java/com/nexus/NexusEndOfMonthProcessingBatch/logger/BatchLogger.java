@@ -30,6 +30,10 @@ public class BatchLogger {
         successCounter++;
     }
 
+    public void addSuccessCounterValue(int counter) {
+        successCounter += counter;
+    }
+
     public void finish() {
         LocalDateTime endLdt = MyDateUtility.nowLocalDateTime();
         customLogger.print(title + " 終了" +

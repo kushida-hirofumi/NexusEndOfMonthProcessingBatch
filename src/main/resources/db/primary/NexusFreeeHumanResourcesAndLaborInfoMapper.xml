@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.mapper.NexusFreeeHumanResourcesAndLaborInfoMapper">
+    <resultMap id="NexusFreeeHumanResourcesAndLaborInfoResultMap" type="com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity.NexusFreeeHumanResourcesAndLaborInfoEntity">
+        <result column="freee_id" property="freeeId"/>
+        <result column="pay_date" property="payDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTypeHandler"/>
+        <result column="basic_salary" property="basicSalary"/>
+        <result column="job_allowance" property="jobAllowance"/>
+        <result column="business_allowances" property="businessAllowances"/>
+        <result column="registered_user_id" property="registeredUserId"/>
+        <result column="registered_date" property="registeredDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_date" property="updateDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
+    </resultMap>
+
+    <insert id="insertList" parameterType="hashmap">
+
+        INSERT INTO nexus_freee_human_resources_and_labor_info (
+
+        freee_id,
+        pay_date,
+        basic_salary,
+        job_allowance,
+        business_allowances,
+        registered_user_id,
+        registered_date
+
+        ) VALUES
+        <foreach collection="entities" item="entity" index="index" separator=",">
+            (
+            #{entity.freeeId},
+            #{entity.payDate},
+            ${entity.basicSalary},
+            ${entity.jobAllowance},
+            ${entity.businessAllowances},
+            ${entity.registeredUserId},
+            now()
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        freee_id = freee_id,
+        pay_date = VALUES(pay_date),
+        basic_salary = VALUES(basic_salary),
+        job_allowance = VALUES(job_allowance),
+        business_allowances = VALUES(business_allowances),
+        update_user_id = VALUES(registered_user_id),
+        update_date = now()
+    </insert>
+
+</mapper>

@@ -2,7 +2,9 @@ package com.nexus.NexusEndOfMonthProcessingBatch.infrastructure.freee_api.jinji.
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,18 @@ public class FreeeApiHrEmployeePayrollStatementsListDto {
         int employeeId;
 
         /**
+         * FreeeID
+         */
+        @JsonProperty("employee_num")
+        String employeeNum;
+
+        /**
+         * 支払日
+         */
+        @JsonProperty("pay_date")
+        LocalDate payDate;
+
+        /**
          * 基本給
          */
         @JsonProperty("basic_pay_amount")
@@ -63,6 +77,9 @@ public class FreeeApiHrEmployeePayrollStatementsListDto {
         @JsonProperty("payments")
         List<Payment> payments = new ArrayList<>();
 
+        /**
+         * 控除項目
+         */
         @JsonProperty("deductions")
         List<Payment> deductions = new ArrayList<>();
 
@@ -80,13 +97,35 @@ public class FreeeApiHrEmployeePayrollStatementsListDto {
         }
 
         /**
+         * 支払い情報リストから支払い金額を抽出する
+         * @param name  抽出する項目名
+         * @return  金額
+         */
+        double extractPayments(String name) {
+            if(StringUtils.isBlank(name)) return 0;
+            EmployeePayrollStatements.Payment payment = payments.stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
+            return payment!=null ? payment.amount : 0;
+        }
+
+        /**
          * @return  成果給
          */
         public double getPerformancePay() {
-            for(EmployeePayrollStatements.Payment payment : payments) {
-                if(payment.name.equals("成果給")) return payment.amount;
-            }
-            return 0;
+            return extractPayments("成果給");
+        }
+
+        /**
+         * @return  業務手当
+         */
+        public double getWorkAllowance() {
+            return extractPayments("業務手当");
+        }
+
+        /**
+         * @return  職務手当
+         */
+        public double getJobAllowance() {
+            return extractPayments("職務手当");
         }
 
         /**
