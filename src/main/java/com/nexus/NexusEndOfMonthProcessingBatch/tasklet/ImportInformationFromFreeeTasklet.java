@@ -26,7 +26,7 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,9 +101,13 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         customLogger.print("FreeeApiから情報を取り込む処理を行う  開始");
-        LocalDateTime paymentDate = MyDateUtility.localDateToLocalDateTime(MyDateUtility.nowLocalDate().withDayOfMonth(1));
-        for(NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity : nexusFreeeApiInfoService.get()) {
-            oneRoop(nexusFreeeApiInfoEntity, paymentDate);
+        LocalDate ld = MyDateUtility.nowLocalDate();
+        List<NexusFreeeApiInfoEntity> nexusFreeeApiInfoEntities = nexusFreeeApiInfoService.get();
+        for(NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity : nexusFreeeApiInfoEntities) {
+            oneRoop(nexusFreeeApiInfoEntity, ld.minusMonths(1).withDayOfMonth(1));
+        }
+        for(NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity : nexusFreeeApiInfoEntities) {
+            oneRoop(nexusFreeeApiInfoEntity, ld.withDayOfMonth(1));
         }
         customLogger.print("FreeeApiから情報を取り込む処理を行う　終了");
         return RepeatStatus.FINISHED;
@@ -113,11 +117,11 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
      * Freeeから情報を取り込みDBに登録する
      * @throws Exception
      */
-    void oneRoop(NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity, LocalDateTime paymentDate) throws Exception {
+    void oneRoop(NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity, LocalDate paymentDate) throws Exception {
 
         List<MstCompaniesThatOutputProfitInformationEntity> mstCompaniesThatOutputProfitInformationEntityList = mstCompaniesThatOutputProfitInformationService.findAll();
 
-        List<FreeeCompanyData> freeeCompanyDataList = getCompanies(nexusFreeeApiInfoEntity, freeeApiRestTemplate, paymentDate, mstCompaniesThatOutputProfitInformationEntityList);
+        List<FreeeCompanyData> freeeCompanyDataList = getCompanies(nexusFreeeApiInfoEntity, paymentDate, mstCompaniesThatOutputProfitInformationEntityList);
         if(freeeCompanyDataList==null || freeeCompanyDataList.isEmpty()) {
             customLogger.print("登録すべき情報がないようです");
             return;
@@ -153,7 +157,7 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
                         .map(TksMasterEmployeeEntity::getID)
                         .distinct()
                         .collect(Collectors.toList()),
-                paymentDate);
+                MyDateUtility.localDateToLocalDateTime(paymentDate));
         List<EompSheet2EntityCollection> eompSheet2EntityCollectionList = eompEntityCollectionSource.createEndOfMonthProcessingSheet2EntityCollectionList(nexusEndOfMonthProcessingSheet02Entities);
 
         //利益一覧のエンティティ
@@ -184,7 +188,7 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
 
                 NexusProfitListSummaryEntity nexusProfitListSummaryEntity = new NexusProfitListSummaryEntity();
                 nexusProfitListSummaryEntity.setting(
-                        paymentDate.toLocalDate(), invoiceDataComputationService.total(eompSheet2EntityCollection),
+                        paymentDate, invoiceDataComputationService.total(eompSheet2EntityCollection),
                         freeeCompanyData.freeeApiCompanyDto,
                         freeeEmployeeData.employeeDto,
                         freeeEmployeeData.freeeApiEmployeePayrollStatementsDto,
@@ -208,8 +212,8 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
 
     }
 
-    List<FreeeCompanyData> getCompanies(NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity, FreeeApiRestTemplate freeeApiRestTemplate, LocalDateTime ld, List<MstCompaniesThatOutputProfitInformationEntity> mstCompaniesThatOutputProfitInformationEntityList) throws Exception {
-        if(freeeApiRestTemplate==null || ld==null || mstCompaniesThatOutputProfitInformationEntityList==null || mstCompaniesThatOutputProfitInformationEntityList.isEmpty()) return null;
+    List<FreeeCompanyData> getCompanies(NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity, LocalDate ld, List<MstCompaniesThatOutputProfitInformationEntity> mstCompaniesThatOutputProfitInformationEntityList) throws Exception {
+        if(ld==null || mstCompaniesThatOutputProfitInformationEntityList==null || mstCompaniesThatOutputProfitInformationEntityList.isEmpty()) return null;
         List<FreeeCompanyData> freeeCompanyDataList = new ArrayList<>();
         FreeeApiAccountingCompanyRequestBody freeeApiAccountingCompanyRequestBody = new FreeeApiAccountingCompanyRequestBody();
         freeeApiAccountingCompanyRequestBody.setId(nexusFreeeApiInfoEntity.getCompanyId());
@@ -222,12 +226,12 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
         //出力すべき会社ではなければ追加しない
         if(mstCompaniesThatOutputProfitInformationEntity==null) return freeeCompanyDataList;
 
-        FreeeApiHrEmployeesRequestBody freeeApiHrEmployeesRequestBody = new FreeeApiHrEmployeesRequestBody(ld);
+        FreeeApiHrEmployeesRequestBody freeeApiHrEmployeesRequestBody = new FreeeApiHrEmployeesRequestBody(ld.getYear(), ld.getMonthValue());
         freeeApiHrEmployeesRequestBody.setCompanyId(freeeApiAccountingCompanyDto.getCompany().getId());
         List<FreeeApiHrEmployeeListDto.Employee> employeeList = getHrEmployeesByCompanyId(nexusFreeeApiInfoEntity.getAccessToken(), freeeApiHrEmployeesRequestBody);
         customLogger.print("Freeeから取り込んだ社員数: " + employeeList.size());
 
-        FreeeApiHrSalariesEmployeePayrollStatementsRequestBody freeeApiHrSalariesEmployeePayrollStatementsRequestBody = new FreeeApiHrSalariesEmployeePayrollStatementsRequestBody(ld);
+        FreeeApiHrSalariesEmployeePayrollStatementsRequestBody freeeApiHrSalariesEmployeePayrollStatementsRequestBody = new FreeeApiHrSalariesEmployeePayrollStatementsRequestBody(ld.getYear(), ld.getMonthValue());
         freeeApiHrSalariesEmployeePayrollStatementsRequestBody.setCompanyId(freeeApiAccountingCompanyDto.getCompany().getId());
         List<FreeeApiHrEmployeePayrollStatementsListDto.EmployeePayrollStatements> employeePayrollStatementsListDto = getEmployeePayrollStatementsByCompanyId(nexusFreeeApiInfoEntity.getAccessToken(), freeeApiHrSalariesEmployeePayrollStatementsRequestBody);
 

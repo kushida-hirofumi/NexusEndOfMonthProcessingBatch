@@ -21,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.ResponseActions;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,8 +50,7 @@ public class FreeeApiSalariesEmployeePayrollStatementsTest {
     public void setUp() {
         NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity = FreeeApiRestTemplateTestUtility.getNexusFreeeApiInfoEntity().get(0);
 
-        LocalDateTime ldt = LocalDateTime.of(2026,1,1, 0, 0);
-        requestBody = new  FreeeApiHrSalariesEmployeePayrollStatementsRequestBody(ldt){{
+        requestBody = new  FreeeApiHrSalariesEmployeePayrollStatementsRequestBody(2026, 1){{
             setCompanyId(nexusFreeeApiInfoEntity.getCompanyId());
         }};
         responseBody = new   FreeeApiHrEmployeePayrollStatementsListDto(){{

@@ -2,8 +2,6 @@ package com.nexus.NexusEndOfMonthProcessingBatch.infrastructure.freee_api.jinji.
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 /**
  * 【クラス分類】
  * リクエストボディ
@@ -43,8 +41,8 @@ public class FreeeApiHrEmployeesRequestBody {
      */
     boolean withNoPayrollCalculation;
 
-    public FreeeApiHrEmployeesRequestBody(LocalDateTime ld) {
-        this.year = ld.getYear();
-        this.month = ld.getMonthValue();
+    public FreeeApiHrEmployeesRequestBody(int year, int month) {
+        this.year = year;
+        this.month = month;
     }
 }
