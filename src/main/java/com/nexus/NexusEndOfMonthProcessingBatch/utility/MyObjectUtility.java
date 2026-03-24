@@ -5,35 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
 
 @Slf4j
 public class MyObjectUtility {
-
-    /**
-     * オブジェクトが持つ全てのフィールドの名前と値をHashMapに格納して出力する
-     * @return HashMapオブジェクト
-     */
-    public static HashMap<String, String> fieldsInHashMap(Object object) {
-        if(object==null) return null;
-        HashMap<String, String> hashMap = new HashMap<>();
-        try {
-            Class<?> refCls = object.getClass();
-            do {
-                for (Field field : refCls.getDeclaredFields()) {
-                    if (Modifier.isStatic(field.getModifiers())) continue;
-                    field.setAccessible(true);
-                    if (field.get(object) == null) continue;
-                    hashMap.put(field.getName(), String.valueOf(field.get(object)));
-                }
-                refCls = refCls.getSuperclass();
-            } while (refCls != null);
-        } catch (IllegalAccessException e) {
-            log.warn(e.getMessage());
-            return null;
-        }
-        return hashMap;
-    }
 
     public static Field getField(Object object,String fieldName) {
         if(object==null) return null;
