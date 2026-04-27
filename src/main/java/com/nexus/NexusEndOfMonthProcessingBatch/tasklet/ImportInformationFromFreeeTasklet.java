@@ -19,11 +19,13 @@ import com.nexus.NexusEndOfMonthProcessingBatch.service.*;
 import com.nexus.NexusEndOfMonthProcessingBatch.utility.MyDateUtility;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -61,6 +63,10 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
         //FreeeApiから取得した給与情報
         FreeeApiHrEmployeePayrollStatementsListDto.EmployeePayrollStatements freeeApiEmployeePayrollStatementsDto = null;
     }
+
+    //バッチパラメータ
+    @Value("${spring.batch.job.params}")
+    String params;
 
     @Autowired
     MstCompaniesThatOutputProfitInformationService mstCompaniesThatOutputProfitInformationService;
@@ -102,6 +108,7 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         customLogger.print("FreeeApiから情報を取り込む処理を行う  開始");
         LocalDate ld = MyDateUtility.nowLocalDate();
+        if(!StringUtils.isBlank(params)) ld = LocalDate.parse(params);
         List<NexusFreeeApiInfoEntity> nexusFreeeApiInfoEntities = nexusFreeeApiInfoService.get();
         for(NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity : nexusFreeeApiInfoEntities) {
             oneRoop(nexusFreeeApiInfoEntity, ld.minusMonths(1).withDayOfMonth(1));
@@ -142,15 +149,13 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
         }
 
         List<NexusLinkingInformationBetweenTksAndFreeeEntity> nexusLinkingInformationBetweenTksAndFreeeEntityList = nexusLinkingInformationBetweenTksAndFreeeService.findByFreeeIdList(freeeIdList);
-        List<Integer> tksIds = new ArrayList<>();
-        for(NexusLinkingInformationBetweenTksAndFreeeEntity entity : nexusLinkingInformationBetweenTksAndFreeeEntityList) {
-            tksIds.add(entity.getTksData());
-        }
 
         //TKS会社情報
         List<TksMasterCompanyEntity> tksMasterCompanyEntityList = tksMasterCompanyService.findByIds(companyIdList);
         //TKS社員情報
-        List<TksMasterEmployeeEntity> tksMasterEmployeeEntityList = tksMasterEmployeeService.findByIds(tksIds);
+        List<TksMasterEmployeeEntity> tksMasterEmployeeEntityList = tksMasterEmployeeService.findByIds(
+                nexusLinkingInformationBetweenTksAndFreeeEntityList.stream()
+                        .map(NexusLinkingInformationBetweenTksAndFreeeEntity::getTksData).collect(Collectors.toList()));
         //社員IDと支払日で月末処理レコード取得
         List<NexusEndOfMonthProcessingSheet02Entity> nexusEndOfMonthProcessingSheet02Entities = nexusEndOfMonthProcessingSheet02Service.findByEmployeeIdsAndWorkingDate(
                 tksMasterEmployeeEntityList.stream()

@@ -41,7 +41,7 @@
         </foreach>
         ON DUPLICATE KEY UPDATE
         freee_id = freee_id,
-        pay_date = VALUES(pay_date),
+        pay_date = pay_date,
         basic_salary = VALUES(basic_salary),
         job_allowance = VALUES(job_allowance),
         business_allowances = VALUES(business_allowances),
