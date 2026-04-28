@@ -12,4 +12,5 @@ import java.util.List;
 @Mapper
 public interface NexusFreeeHumanResourcesAndLaborInfoMapper {
     int insertList(@Param("entities") List<NexusFreeeHumanResourcesAndLaborInfoEntity> entities);
+    List<NexusFreeeHumanResourcesAndLaborInfoEntity> findAll();
 }

@@ -21,4 +21,7 @@ public class NexusFreeeHumanResourcesAndLaborInfoService {
         return mapper.insertList(entities);
     }
 
+    public List<NexusFreeeHumanResourcesAndLaborInfoEntity> findAll() {
+        return mapper.findAll();
+    }
 }

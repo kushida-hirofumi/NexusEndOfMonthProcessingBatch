@@ -1,5 +1,6 @@
 package com.nexus.NexusEndOfMonthProcessingBatch.domain.primary.entity;
 
+import com.nexus.NexusEndOfMonthProcessingBatch.infrastructure.freee_api.jinji.dto.FreeeApiHrEmployeePayrollStatementsListDto;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -28,4 +29,22 @@ public class NexusFreeeHumanResourcesAndLaborInfoEntity {
     Integer updateUserId;
     //更新日時
     LocalDateTime updateDate;
+
+
+    /**
+     * FreeeApiから取得した給与明細情報からエンティティ設定
+     * @param employeePayrollStatementsListDto  給与明細情報
+     */
+    public void setting(FreeeApiHrEmployeePayrollStatementsListDto.EmployeePayrollStatements employeePayrollStatementsListDto) {
+        //FreeeID
+        freeeId = employeePayrollStatementsListDto.getEmployeeNum();
+        //支払日
+        payDate = employeePayrollStatementsListDto.getPayDate();
+        //基本給
+        basicSalary = (int) employeePayrollStatementsListDto.getBasicPayAmount();
+        //業務手当
+        businessAllowances = (int) employeePayrollStatementsListDto.getWorkAllowance();
+        //職務手当
+        jobAllowance = (int) employeePayrollStatementsListDto.getJobAllowance();
+    }
 }

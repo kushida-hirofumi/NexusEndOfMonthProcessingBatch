@@ -36,6 +36,14 @@ public class NexusEndOfMonthProcessingSheet02Entity extends ToCreateInvoicesInte
     LocalDateTime workingDate;
     //成果給
     Integer payForResults;
+    //基本給
+    int basicSalary;
+    //職務手当
+    Integer jobAllowance;
+    //技術手当
+    Integer technicalAllowance;
+    //業務手当
+    Integer businessAllowance;
     //通勤手当
     Integer commutingAllowance;
     //資格手当
@@ -46,8 +54,12 @@ public class NexusEndOfMonthProcessingSheet02Entity extends ToCreateInvoicesInte
     Integer customerBillingExpenses;
     //休み
     Double holiday;
-    //時間外h
-    Double overtimeHour;
+    //稼働日数
+    int numberOfWorkingDays;
+    //時間外h(1.0)
+    double overtimeHour_1_0;
+    //時間外h(1.25)
+    double overtimeHour_1_25;
     //休日出勤h
     Double holidayWorkHour;
     //夜勤h
@@ -101,7 +113,7 @@ public class NexusEndOfMonthProcessingSheet02Entity extends ToCreateInvoicesInte
     //給与計算用
     Boolean payrollFlag;
     //レコードロックフラグ
-    Boolean recordLockFlag;
+    boolean recordLockFlag;
     //請求書ファイルID
     Integer invoiceFileId;
     //請求書ファイルの項目名差し替え(作業代)
@@ -190,4 +202,13 @@ public class NexusEndOfMonthProcessingSheet02Entity extends ToCreateInvoicesInte
         return result;
     }
 
+    /**
+     * @return  請求書作成ボタンで作成したレコードならばtrue
+     */
+    public boolean checkSourceInvoiceBtn() {
+        return payForResults == 0 && basicSalary == 0 && jobAllowance == 0 && technicalAllowance == 0
+                && businessAllowance == 0 && commutingAllowance == 0
+                && qualificationAllowance == 0
+                && expenses == 0;
+    }
 }

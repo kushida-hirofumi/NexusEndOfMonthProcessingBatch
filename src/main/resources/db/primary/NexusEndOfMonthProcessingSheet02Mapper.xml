@@ -13,12 +13,18 @@
         <result column="memo" property="memo"/>
         <result column="working_date" property="workingDate" typeHandler="com.nexus.NexusEndOfMonthProcessingBatch.domain.type_handler.LocalDateTimeTypeHandler"/>
         <result column="pay_for_results" property="payForResults"/>
+        <result column="basic_salary" property="basicSalary"/>
+        <result column="job_allowance" property="jobAllowance"/>
+        <result column="technical_allowance" property="technicalAllowance"/>
+        <result column="business_allowance" property="businessAllowance"/>
         <result column="commuting_allowance" property="commutingAllowance"/>
         <result column="qualification_allowance" property="qualificationAllowance"/>
         <result column="expenses" property="expenses"/>
         <result column="customer_billing_expenses" property="customerBillingExpenses"/>
         <result column="holiday" property="holiday"/>
-        <result column="overtime_hour" property="overtimeHour"/>
+        <result column="number_of_working_days" property="numberOfWorkingDays"/>
+        <result column="overtime_hour_1_0" property="overtimeHour_1_0"/>
+        <result column="overtime_hour_1_25" property="overtimeHour_1_25"/>
         <result column="holiday_work_hour" property="holidayWorkHour"/>
         <result column="night_shift" property="nightShift"/>
         <result column="work_time" property="workTime"/>
@@ -72,12 +78,18 @@
         memo,
         working_date,
         pay_for_results,
+        basic_salary,
+        job_allowance,
+        technical_allowance,
+        business_allowance,
         commuting_allowance,
         qualification_allowance,
         expenses,
         customer_billing_expenses,
         holiday,
-        overtime_hour,
+        number_of_working_days,
+        overtime_hour_1_0,
+        overtime_hour_1_25,
         holiday_work_hour,
         night_shift,
         work_time,
@@ -123,12 +135,18 @@
         #{memo, jdbcType=LONGVARCHAR},
         #{workingDate, jdbcType=TIMESTAMP},
         #{payForResults, jdbcType=INTEGER},
+        #{basicSalary, jdbcType=INTEGER},
+        #{jobAllowance, jdbcType=INTEGER},
+        #{technicalAllowance, jdbcType=INTEGER},
+        #{businessAllowance, jdbcType=INTEGER},
         #{commutingAllowance, jdbcType=INTEGER},
         #{qualificationAllowance, jdbcType=INTEGER},
         #{expenses, jdbcType=INTEGER},
         #{customerBillingExpenses, jdbcType=INTEGER},
         #{holiday, jdbcType=DOUBLE},
-        #{overtimeHour, jdbcType=DOUBLE},
+        #{numberOfWorkingDays, jdbcType=INTEGER},
+        #{overtimeHour_1_0, jdbcType=DOUBLE},
+        #{overtimeHour_1_25, jdbcType=DOUBLE},
         #{holidayWorkHour, jdbcType=DOUBLE},
         #{nightShift, jdbcType=DOUBLE},
         #{workTime, jdbcType=INTEGER},
@@ -174,12 +192,18 @@
         memo = #{memo, jdbcType=LONGVARCHAR},
         working_date = #{workingDate, jdbcType=TIMESTAMP},
         pay_for_results = #{payForResults, jdbcType=INTEGER},
+        basic_salary = #{basicSalary, jdbcType=INTEGER},
+        job_allowance = #{jobAllowance, jdbcType=INTEGER},
+        technical_allowance = #{technicalAllowance, jdbcType=INTEGER},
+        business_allowance = #{businessAllowance, jdbcType=INTEGER},
         commuting_allowance = #{commutingAllowance, jdbcType=INTEGER},
         qualification_allowance = #{qualificationAllowance, jdbcType=INTEGER},
         expenses = #{expenses, jdbcType=INTEGER},
         customer_billing_expenses = #{customerBillingExpenses, jdbcType=INTEGER},
         holiday = #{holiday, jdbcType=DOUBLE},
-        overtime_hour = #{overtimeHour, jdbcType=DOUBLE},
+        number_of_working_days = #{numberOfWorkingDays, jdbcType=INTEGER},
+        overtime_hour_1_0 = #{overtimeHour_1_0, jdbcType=DOUBLE},
+        overtime_hour_1_25 = #{overtimeHour_1_25, jdbcType=DOUBLE},
         holiday_work_hour = #{holidayWorkHour, jdbcType=DOUBLE},
         night_shift =  #{nightShift, jdbcType=DOUBLE},
         work_time = #{workTime, jdbcType=INTEGER},

@@ -4,6 +4,7 @@ import com.nexus.NexusEndOfMonthProcessingBatch.constant.BatchModeConstant;
 import com.nexus.NexusEndOfMonthProcessingBatch.logger.CustomLogger;
 import com.nexus.NexusEndOfMonthProcessingBatch.tasklet.ImportInformationFromFreeeTasklet;
 import com.nexus.NexusEndOfMonthProcessingBatch.tasklet.RefreshTokenTasklet;
+import com.nexus.NexusEndOfMonthProcessingBatch.tasklet.RepairFreeeTasklet;
 import com.nexus.NexusEndOfMonthProcessingBatch.tasklet.TestTasklet;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -43,6 +44,9 @@ public class BatchConfig {
     @Autowired
     ImportInformationFromFreeeTasklet importInformationFromFreeeTasklet;
 
+    @Autowired
+    RepairFreeeTasklet repairFreeeTasklet;
+
     @Bean
     public Job job() {
         BatchModeConstant batchModeConstant = BatchModeConstant.valueOfKey(appMode);
@@ -51,6 +55,7 @@ public class BatchConfig {
                 case none -> createJob(batchModeConstant, testTasklet);
                 case refreshToken -> createJob(batchModeConstant, refreshTokenTasklet);
                 case importInfoFromFreeeApi -> createJob(batchModeConstant, importInformationFromFreeeTasklet);
+                case repairFreee -> createJob(batchModeConstant, repairFreeeTasklet);
             };
         }
         return createJob(BatchModeConstant.refreshToken, refreshTokenTasklet);

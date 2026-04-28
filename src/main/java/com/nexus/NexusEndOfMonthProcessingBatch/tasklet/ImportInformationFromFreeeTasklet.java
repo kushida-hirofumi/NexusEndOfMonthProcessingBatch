@@ -201,7 +201,10 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
                         tksMasterEmployeeEntity);
                 if(nexusProfitListSummaryEntity.getEmployeeId()!=0) nexusProfitListSummaryEntityList.add(nexusProfitListSummaryEntity);
 
-                nexusFreeeHumanResourcesAndLaborInfoEntityList.add(createNexusFreeeHumanResourcesAndLaborInfoEntity(freeeEmployeeData.freeeApiEmployeePayrollStatementsDto));
+                NexusFreeeHumanResourcesAndLaborInfoEntity nexusFreeeHumanResourcesAndLaborInfoEntity = new NexusFreeeHumanResourcesAndLaborInfoEntity();
+                nexusFreeeHumanResourcesAndLaborInfoEntity.setting(freeeEmployeeData.freeeApiEmployeePayrollStatementsDto);
+                nexusFreeeHumanResourcesAndLaborInfoEntity.setRegisteredUserId(0);
+                nexusFreeeHumanResourcesAndLaborInfoEntityList.add(nexusFreeeHumanResourcesAndLaborInfoEntity);
             }
         }
 
@@ -217,6 +220,14 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
 
     }
 
+    /**
+     * FreeeApiから会社情報を取得する
+     * @param nexusFreeeApiInfoEntity   リクエストボディ
+     * @param ld    日付
+     * @param mstCompaniesThatOutputProfitInformationEntityList 会社情報マスタ
+     * @return  会社情報
+     * @throws Exception
+     */
     List<FreeeCompanyData> getCompanies(NexusFreeeApiInfoEntity nexusFreeeApiInfoEntity, LocalDate ld, List<MstCompaniesThatOutputProfitInformationEntity> mstCompaniesThatOutputProfitInformationEntityList) throws Exception {
         if(ld==null || mstCompaniesThatOutputProfitInformationEntityList==null || mstCompaniesThatOutputProfitInformationEntityList.isEmpty()) return null;
         List<FreeeCompanyData> freeeCompanyDataList = new ArrayList<>();
@@ -254,7 +265,7 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
     }
 
     /**
-     * 事業所の従業員の取得を行う
+     * FreeeApiから事業所の従業員の取得を行う
      * @param freeeApiHrEmployeesRequestBody    リクエストボディ
      * @return  従業員の一覧
      * @throws Exception
@@ -274,7 +285,7 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
     }
 
     /**
-     * 給与明細一覧の取得を行う
+     * FreeeApiから給与明細一覧の取得を行う
      * @param requestParam  リクエストボディ
      * @return  給与明細の一覧
      * @throws Exception
@@ -293,24 +304,4 @@ public class ImportInformationFromFreeeTasklet implements Tasklet {
         return result;
     }
 
-    /**
-     * FreeeApiから取得した給与明細情報からエンティティ生成
-     * @param employeePayrollStatementsListDto  給与明細情報
-     * @return  エンティティ
-     */
-    NexusFreeeHumanResourcesAndLaborInfoEntity createNexusFreeeHumanResourcesAndLaborInfoEntity(FreeeApiHrEmployeePayrollStatementsListDto.EmployeePayrollStatements employeePayrollStatementsListDto) {
-        NexusFreeeHumanResourcesAndLaborInfoEntity nexusFreeeHumanResourcesAndLaborInfoEntity = new NexusFreeeHumanResourcesAndLaborInfoEntity();
-        //FreeeID
-        nexusFreeeHumanResourcesAndLaborInfoEntity.setFreeeId(employeePayrollStatementsListDto.getEmployeeNum());
-        //支払日
-        nexusFreeeHumanResourcesAndLaborInfoEntity.setPayDate(employeePayrollStatementsListDto.getPayDate());
-        //基本給
-        nexusFreeeHumanResourcesAndLaborInfoEntity.setBasicSalary((int) employeePayrollStatementsListDto.getBasicPayAmount());
-        //業務手当
-        nexusFreeeHumanResourcesAndLaborInfoEntity.setBusinessAllowances((int) employeePayrollStatementsListDto.getWorkAllowance());
-        //職務手当
-        nexusFreeeHumanResourcesAndLaborInfoEntity.setJobAllowance((int) employeePayrollStatementsListDto.getJobAllowance());
-        nexusFreeeHumanResourcesAndLaborInfoEntity.setRegisteredUserId(0);
-        return nexusFreeeHumanResourcesAndLaborInfoEntity;
-    }
 }

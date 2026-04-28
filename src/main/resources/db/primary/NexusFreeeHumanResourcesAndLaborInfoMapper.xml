@@ -49,4 +49,7 @@
         update_date = now()
     </insert>
 
+    <select id="findAll" resultMap="NexusFreeeHumanResourcesAndLaborInfoResultMap">
+        SELECT * FROM nexus_freee_human_resources_and_labor_info
+    </select>
 </mapper>

@@ -15,6 +15,8 @@ public enum BatchModeConstant {
     //FreeeApiから情報を取り込む
     importInfoFromFreeeApi("importInfoFromFreeeApi"),
 
+    //Freee関連情報の修復を行う
+    repairFreee("repairFreee"),
     ;
 
     final String key;
